@@ -1,0 +1,3228 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Av. Fırat Can Güngör</title>
+
+  <!-- PWA -->
+  <meta name="application-name" content="Av. Fırat Can Güngör" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Ofis Takip" />
+  <meta name="theme-color" content="#1e293b" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Av.%20F%C4%B1rat%20Can%20G%C3%BCng%C3%B6r%20-%20Ofis%20Takip%22%2C%22short_name%22%3A%22Ofis%20Takip%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23dbeafe%22%2C%22theme_color%22%3A%22%231e293b%22%2C%22orientation%22%3A%22portrait%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%2527http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%2527%2520viewBox%3D%270%25200%2520100%2520100%2527%253E%253Crect%2520width%3D%2527100%2527%2520height%3D%2527100%2527%2520rx%3D%252720%2527%2520fill%3D%2527%25231e293b%2527%2F%253E%253Ctext%2520y%3D%2527.9em%2527%2520font-size%3D%252770%2527%2520x%3D%252715%2527%253E%25E2%2598%25A5%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D" />
+  <style>
+    :root {
+      --bg: #dbeafe;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #4b6a8a;
+      --line: #bfdbfe;
+      --dark: #374151;
+      --accent: #4b5563;
+      --accent2: #059669;
+      --danger: #dc2626;
+      --soft: #eff6ff;
+      --soft2: #dbeafe;
+      --header-bg: linear-gradient(135deg, #1e293b 0%, #334155 60%, #475569 100%);
+      --tab-active: #374151;
+      --stat-gradient-1: linear-gradient(135deg, #374151, #6b7280);
+      --stat-gradient-2: linear-gradient(135deg, #1e293b, #475569);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+    .container { max-width: 1280px; margin: 0 auto; padding: 24px; }
+    .topbar {
+      display: flex; gap: 16px; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 24px;
+      background: var(--header-bg);
+      border-radius: 24px;
+      padding: 20px 28px;
+      box-shadow: 0 4px 24px rgba(30,58,138,.18);
+    }
+    .title h1 { margin: 0 0 8px; font-size: 32px; color: white; text-shadow: 0 1px 4px rgba(0,0,0,.2); }
+    .title p { margin: 0; color: #bfdbfe; max-width: 760px; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .export-wrap { position: relative; }
+    .export-menu { position: absolute; top: calc(100% + 8px); right: 0; min-width: 210px; background: white; border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 12px 30px rgba(15,23,42,.10); padding: 8px; z-index: 20; }
+    .export-menu button { width: 100%; justify-content: flex-start; background: white; color: var(--text); border: 1px solid var(--line); }
+    button, .btn, input, select { font: inherit; }
+    button, .btn {
+      border: 0; border-radius: 16px; padding: 12px 16px; cursor: pointer;
+      background: var(--dark); color: white; transition: .15s ease; text-decoration: none; display: inline-flex; align-items:center; gap: 8px;
+    }
+    button:hover, .btn:hover { filter: brightness(1.1); }
+    button.secondary, .btn.secondary, .tiny-btn {
+      background: white; color: var(--text); border: 1px solid var(--line);
+    }
+    button.secondary:hover, .btn.secondary:hover { background: var(--soft); }
+    /* Topbar butonları beyaz/yarı şeffaf */
+    .topbar button, .topbar .btn {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: white;
+      backdrop-filter: blur(4px);
+    }
+    .topbar button:hover, .topbar .btn:hover { background: rgba(255,255,255,0.28); }
+    .topbar button.red { background: rgba(220,38,38,0.75); border-color: transparent; }
+    button.green { background: var(--accent2); }
+    button.red, .tiny-btn.red { color: white; background: var(--danger); border-color: transparent; }
+    button:disabled { opacity: .6; cursor: not-allowed; }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 1px 6px rgba(30,58,138,.07); }
+    .stat { padding: 20px; background: white; border-radius: 24px; border: 1px solid var(--line); }
+    .stat .label { color: var(--muted); font-size: 14px; font-weight: 600; }
+    .stat .value { font-size: 28px; font-weight: 700; margin-top: 10px; color: #0f172a; }
+    .stat .helper { color: var(--muted); font-size: 12px; margin-top: 8px; }
+    .tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+    .tab { background: white; color: var(--text); border: 1px solid var(--line); }
+    .tab.active { background: var(--tab-active); color: white; border-color: var(--tab-active); box-shadow: 0 2px 10px rgba(55,65,81,.25); }
+    .tab:hover:not(.active) { background: var(--soft); border-color: #93c5fd; }
+    .grid-2 { display: grid; grid-template-columns: 360px minmax(0,1fr); gap: 20px; }
+    .grid-2-wide { display: grid; grid-template-columns: 380px minmax(0,1fr); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 20px; }
+    .split-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+    .section-head { padding: 18px 20px; border-bottom: 1px solid #eff6ff; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; background: linear-gradient(90deg, #eff6ff 0%, #fff 100%); border-radius: 24px 24px 0 0; }
+    .section-head h3 { margin: 0; font-size: 18px; color: #0f172a; }
+    .section-head p { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+    .section-body { padding: 20px; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #0f172a; }
+    .field input, .field select, .field textarea {
+      width: 100%; border: 1px solid #bfdbfe; background: white; border-radius: 16px; padding: 12px 14px;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: 2px solid #3b82f6; border-color: #3b82f6; }
+    .field textarea { min-height: 110px; resize: vertical; }
+    .field input[type="checkbox"] { width: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid #eff6ff; text-align: left; vertical-align: top; }
+    th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: #0f172a; background: #eff6ff; font-weight: 700; }
+    tr:hover td { background: #f0f9ff; }
+    .table-wrap { overflow: auto; border-radius: 24px; border: 1px solid var(--line); }
+    .files-scroll-table { min-width: 1180px; }
+    .inline-select { min-width: 135px; max-width: 160px; width: 160px; padding: 8px 10px !important; border-radius: 12px !important; font-size: 14px; line-height: 1.2; }
+    .files-panel-grid { display:grid; grid-template-columns: minmax(0,1fr) 270px; gap:18px; align-items:start; }
+    .files-filter-card { position: sticky; top: 20px; }
+    .files-filter-buttons { display:flex; flex-direction:column; gap:8px; }
+    .files-filter-btn { width:100%; justify-content:flex-start; background:white; color:var(--text); border:1px solid var(--line); }
+    .files-filter-btn.active { background: var(--dark); color:white; border-color: transparent; }
+    .files-search-row { display:flex; gap:10px; align-items:end; margin-bottom:16px; flex-wrap:wrap; }
+    .files-search-row .field { flex:1; min-width:220px; margin-bottom:0; }
+    #allFilesTableWrap { max-height: 520px; overflow: auto; }
+    #allFilesTableWrap thead th { position: sticky; top: 0; z-index: 1; }
+    .muted { color: var(--muted); }
+    .empty { padding: 32px; text-align: center; color: var(--muted); background: #eff6ff; border: 1px dashed #93c5fd; border-radius: 20px; }
+    .done { text-decoration: line-through; color: #94a3b8; }
+    .tiny-btn { padding: 8px 10px; border-radius: 12px; }
+    .summary-grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:14px; margin-top:18px; }
+    .summary-box { background: #eff6ff; border-radius: 20px; padding: 16px; border: 1px solid #bfdbfe; }
+    .summary-box .label { font-size:14px; color:var(--muted); }
+    .summary-box .value { font-size:22px; font-weight:700; margin-top:8px; color:#0f172a; }
+    .note { font-size: 13px; color: #0f172a; background: #eff6ff; border-radius: 16px; padding: 12px 14px; border-left: 3px solid #3b82f6; }
+    .success { color: #047857; background: #ecfdf5; }
+    .hidden { display:none !important; }
+    .pill {
+      display:inline-flex; align-items:center; gap:8px; border-radius:999px; padding:8px 12px;
+      background: #dbeafe; color: #0f172a; font-size: 12px; font-weight: 700;
+    }
+    .row-stack { display:flex; gap:8px; flex-wrap:wrap; }
+    .client-title { display:flex; flex-direction:column; gap:8px; }
+    .selected-panel { background: linear-gradient(180deg, #eff6ff 0%, #ffffff 100%); }
+
+    #clientTableWrap {
+      max-height: 420px;
+      overflow: auto;
+    }
+    #clientTableWrap thead th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    #companyTableWrap {
+      max-height: 420px;
+      overflow: auto;
+    }
+    #companyTableWrap thead th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .clickable-row { cursor: pointer; }
+    .clickable-row:hover td { background: #eff6ff; }
+    .client-link { font-weight: 700; text-decoration: underline; cursor: pointer; color: #0f172a; }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(15,23,42,.45); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000; }
+    .modal-card { width: min(760px, 100%); max-height: 85vh; overflow: hidden; background: white; border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 24px 60px rgba(30,58,138,.22); }
+    .search-list { border: 1px solid var(--line); border-radius: 20px; overflow: auto; max-height: 360px; }
+    .search-item-btn { width: 100%; text-align: left; background: white; color: var(--text); border: 0; border-bottom: 1px solid #eff6ff; border-radius: 0; padding: 14px 16px; display: block; }
+    .search-item-btn:hover { background: #eff6ff; }
+    .search-item-title { font-weight: 700; margin-bottom: 4px; }
+    .file-notes-grid { display:grid; grid-template-columns: minmax(0,0.9fr) minmax(0,1.1fr); gap:16px; margin-bottom:18px; }
+    .linked-file-text { font-size: 13px; line-height: 1.45; }
+
+    @media (max-width: 980px) {
+      .stats { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .grid-2, .grid-2-wide, .grid-3, .split-2, .files-panel-grid { grid-template-columns: 1fr; }
+      .files-filter-card { position: static; }
+    }
+    @media (max-width: 640px) {
+      .container { padding: 10px; }
+      .stats { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .title h1 { font-size: 18px; }
+
+      /* Sekmeler yatay kaydırılabilir */
+      .tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 6px;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+      }
+      .tabs::-webkit-scrollbar { display: none; }
+      .tab { white-space: nowrap; flex-shrink: 0; padding: 10px 14px; font-size: 13px; }
+
+      /* Topbar */
+      .topbar { padding: 12px 14px; border-radius: 16px; }
+      #syncStatus { font-size: 11px; }
+
+      /* Kartlar */
+      .card { border-radius: 16px; }
+      .section-head { padding: 12px 14px; border-radius: 16px 16px 0 0; }
+      .section-head h3 { font-size: 15px; }
+      .section-body { padding: 12px; }
+
+      /* Butonlar */
+      button, .btn { padding: 10px 13px; font-size: 13px; border-radius: 13px; }
+
+      /* Form alanları */
+      .field input, .field select, .field textarea {
+        font-size: 16px; /* iOS zoom önleme — 16px altı zoom yapar */
+        padding: 12px;
+        border-radius: 12px;
+      }
+      .field label { font-size: 13px; }
+
+      /* Ajanda — telefonda 1 sütun */
+      #agendaGrid {
+        grid-template-columns: 1fr !important;
+        gap: 10px;
+      }
+      .agenda-day-card {
+        min-height: unset;
+        padding: 12px;
+      }
+      .agenda-row input[type="text"] {
+        font-size: 16px; /* iOS zoom önleme */
+        padding: 8px 6px;
+        border-bottom: 1.5px solid #bfdbfe;
+        border-radius: 0;
+        -webkit-appearance: none;
+      }
+      .agenda-row input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+      }
+      .agenda-row { gap: 8px; margin-bottom: 6px; }
+      .agenda-day-header .day-num { font-size: 22px; }
+
+      /* Ajanda navigasyon butonları */
+      #agendaRangeLabel { font-size: 12px; }
+      .section-head > div:last-child { flex-wrap: wrap; gap: 6px; }
+
+      /* Tablo sarmalayıcı */
+      .table-wrap { border-radius: 12px; }
+      th, td { padding: 9px 10px; font-size: 13px; }
+
+      /* İstatistik kartları */
+      .stat { padding: 14px; border-radius: 16px; }
+      .stat .value { font-size: 22px; }
+
+      /* Row stack */
+      .row-stack { gap: 6px; }
+      .row-stack button { flex: 1; justify-content: center; }
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white; }
+      .container { max-width: none; padding: 0; }
+      .card { box-shadow: none; }
+    }
+
+    /* Dosya arama dropdown */
+    .file-search-wrap { position: relative; }
+    .file-search-wrap > input[type="text"] {
+      width: 100%; border: 1px solid #bfdbfe; border-radius: 12px;
+      padding: 10px 12px; font: inherit; font-size: 14px; outline: none;
+    }
+    .file-search-wrap > input[type="text"]:focus { border-color: #2563eb; }
+    .file-search-dropdown {
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+      background: white; border: 1px solid #bfdbfe; border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(30,58,138,.12); z-index: 100;
+      max-height: 260px; overflow-y: auto;
+    }
+    .file-search-item {
+      padding: 10px 14px; cursor: pointer; font-size: 13px;
+      border-bottom: 1px solid #eff6ff;
+    }
+    .file-search-item:last-child { border-bottom: none; }
+    .file-search-item:hover { background: #eff6ff; }
+    .file-search-item .fs-court { font-weight: 700; color: #1e3a8a; }
+    .file-search-item .fs-no { color: #475569; font-size: 12px; }
+    .file-search-item .fs-client { color: #059669; font-size: 11px; }
+    .file-search-selected {
+      display: flex; align-items: center; gap: 8px; margin-top: 6px;
+      background: #eff6ff; border-radius: 10px; padding: 6px 10px; font-size: 13px;
+    }
+    .file-search-selected span { flex: 1; color: #1e3a8a; font-weight: 600; }
+    .file-search-selected button {
+      background: none; border: none; color: #dc2626; padding: 2px 6px;
+      border-radius: 6px; cursor: pointer; font-size: 13px;
+    }
+    /* Dosyalar tablosunda tıklanabilir satır */
+    .files-clickable-row { cursor: pointer; }
+    .files-clickable-row:hover td { background: #dbeafe !important; }
+
+    /* Kompakt yapılacaklar tablosu */
+    .task-compact-table th, .task-compact-table td {
+      padding: 6px 10px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    .task-compact-table td:first-child { white-space: normal; min-width: 160px; }
+    .task-compact-table td:nth-child(4) { min-width: 100px; max-width: 150px; }
+    .task-file-input {
+      border: none;
+      border-bottom: 1px solid #bfdbfe;
+      border-radius: 0;
+      background: transparent;
+      font-size: 12px;
+      padding: 2px 4px;
+      width: 100%;
+      color: var(--text);
+      outline: none;
+    }
+    .task-file-input:focus {
+      border-bottom-color: #2563eb;
+      background: white;
+      border-radius: 4px;
+    }
+    .task-compact-table input[type="checkbox"] {
+      width: 16px; height: 16px; cursor: pointer;
+    }
+    .agenda-day-card {
+      background: #f0f9ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 16px;
+      padding: 10px;
+      min-height: 210px;
+    }
+    .agenda-day-card.today {
+      border-color: #2563eb;
+      background: #dbeafe;
+      box-shadow: 0 0 0 2px #93c5fd;
+    }
+    .agenda-day-card.weekend {
+      background: #f5f3ff;
+      border-color: #c4b5fd;
+    }
+    .agenda-day-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .agenda-day-header .day-num {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+    }
+    .agenda-day-card.today .day-num {
+      color: var(--accent2);
+    }
+    .agenda-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 4px;
+    }
+    .agenda-row input[type="checkbox"] {
+      flex-shrink: 0;
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+    .agenda-row input[type="text"] {
+      flex: 1;
+      border: none;
+      border-bottom: 1px solid #e2e8f0;
+      border-radius: 0;
+      padding: 3px 4px;
+      font-size: 12px;
+      background: transparent;
+      color: var(--text);
+      outline: none;
+      min-width: 0;
+    }
+    .agenda-row input[type="text"]:focus {
+      border-bottom-color: var(--accent2);
+      background: white;
+      border-radius: 4px;
+    }
+    .agenda-row input[type="text"].done-text {
+      text-decoration: line-through;
+      color: #94a3b8;
+    }
+    .weekend-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #7c3aed;
+      background: #ede9fe;
+      border-radius: 6px;
+      padding: 1px 5px;
+    }
+    .today-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #047857;
+      background: #d1fae5;
+      border-radius: 6px;
+      padding: 1px 5px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="title" style="width:100%;text-align:center;display:flex;align-items:center;justify-content:center;gap:16px;">
+        <h1 style="font-size:22px;font-weight:700;letter-spacing:0.02em;margin:0;color:white;">Av. Fırat Can Güngör &nbsp;·&nbsp; V.1.0</h1>
+        <span id="syncStatus" style="font-size:13px;font-weight:600;color:#bfdbfe;cursor:pointer;user-select:none;" title="Bulut senkronizasyonu" onclick="pullFromSupabase()">☁️ Bulut</span>
+      </div>
+      <div class="actions no-print">
+        <label class="btn secondary" for="excelImport">Excelden Müvekkil İçe Aktar</label>
+        <input id="excelImport" type="file" accept=".xlsx,.xls,.csv" class="hidden" />
+        <button type="button" id="backupBtn">Yedek Al</button>
+        <label class="btn secondary" for="restoreInput">Yedekten Geri Yükle</label>
+        <input id="restoreInput" type="file" accept=".json" class="hidden" />
+        <div class="export-wrap">
+          <button type="button" id="exportExcelBtn">Excel Dışa Aktar</button>
+          <div id="exportExcelMenu" class="export-menu hidden">
+            <button type="button" id="exportClientsBtn">Müvekkiller</button>
+            <button type="button" id="exportFilesBtn">Dosyalar</button>
+          </div>
+        </div>
+        <button type="button" id="printPdfBtn">PDF Olarak Yazdır</button>
+        <button type="button" class="red" id="resetAllBtn">Sil</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="card stat"><div class="label">Toplam Kazanılan</div><div class="value" id="statIncome">₺0,00</div><div class="helper">Tüm gelir kayıtları</div></div>
+      <div class="card stat"><div class="label">Toplam Masraf</div><div class="value" id="statExpense">₺0,00</div><div class="helper">Tüm gider kayıtları</div></div>
+      <div class="card stat"><div class="label">Güncel Kasa</div><div class="value" id="statCash">₺0,00</div><div class="helper">Başlangıç + gelir - masraf</div></div>
+      <div class="card stat"><div class="label">Müvekkil / Dosya / Şirket</div><div class="value" id="statClientFileCount">0 / 0 / 0</div><div class="helper">Kayıtlı müvekkil, dosya ve şirket sayısı</div></div>
+    </div>
+
+    <div id="importMessage" class="note success hidden" style="margin-bottom:16px;"></div>
+    <div class="note" style="margin-bottom:16px;">İpucu: Müvekkil dosyaları sekmesinde müvekkil aratıp seçebilir, dosya bazlı gelir/masrafları izleyebilirsiniz. Şirket sekmesinde ise şirket bazlı masraf, gelen ve vekalet ücretlerini ayrıca tutabilirsiniz.</div>
+
+    <div class="tabs no-print">
+      <button class="tab active" data-tab="clients">Müvekkil Ana Menü</button>
+      <button class="tab" data-tab="company">Şirket</button>
+      <button class="tab" data-tab="files">Dosyalar</button>
+      <button class="tab" data-tab="upcoming">Yaklaşan İşler</button>
+      <button class="tab" data-tab="tasks">Yapılacaklar</button>
+      <button class="tab" data-tab="party">Parti-Şahsi</button>
+      <button class="tab" data-tab="expenses">Masraflar</button>
+      <button class="tab" data-tab="income">Kazanılan</button>
+      <button class="tab" data-tab="cash">Kasa</button>
+      <button class="tab" data-tab="agenda">📅 Ajanda</button>
+    </div>
+
+    <section class="tab-panel" id="panel-clients">
+      <div class="grid-2-wide">
+        <div class="card">
+          <div class="section-head">
+            <div>
+              <h3>Müvekkil Listesi</h3>
+              <p>Arayın, seçin, yeni müvekkil ekleyin veya silin.</p>
+            </div>
+          </div>
+          <div class="section-body">
+            <form id="clientForm">
+              <div class="field">
+                <label>Yeni Müvekkil</label>
+                <input id="clientNameInput" type="text" placeholder="Örn. Ahmet Yılmaz" />
+              </div>
+              <button type="submit">Müvekkil Ekle</button>
+            </form>
+            <div class="field" style="margin-top:16px;">
+              <label>Müvekkil Ara</label>
+              <input id="clientSearchInput" type="text" placeholder="İsimle ara..." />
+            </div>
+            <div id="clientEmpty" class="empty">Henüz müvekkil kaydı yok.</div>
+            <div id="clientTableWrap" class="table-wrap hidden">
+              <table>
+                <thead><tr><th>Müvekkil</th><th>Dosya</th><th>Aç</th><th>Sil</th></tr></thead>
+                <tbody id="clientTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card selected-panel">
+          <div class="section-head">
+            <div class="client-title">
+              <h3 id="selectedClientTitle">Müvekkil Seçilmedi</h3>
+              <p id="selectedClientSubtitle">Soldaki listeden bir müvekkile tıklayın. Seçili müvekkil için dosya açabilir ve dosya detayına girebilirsiniz.</p>
+            </div>
+            <span class="pill" id="selectedClientBadge">Dosya Sayısı: 0</span>
+          </div>
+          <div class="section-body">
+            <div id="clientDetailEmpty" class="empty">Önce bir müvekkil seçin.</div>
+
+            <div id="clientDetailWrap" class="hidden">
+              <div class="split-2">
+                <div>
+                  <form id="caseFileForm">
+                    <div class="field">
+                      <label>Birim</label>
+                      <input id="caseFileUnitInput" type="text" placeholder="Örn. Hukuk, Ceza, İcra" />
+                    </div>
+                    <div class="field">
+                      <label>Mahkeme</label>
+                      <input id="caseFileCourtInput" type="text" placeholder="Örn. Bursa 3. İş Mahkemesi" />
+                    </div>
+                    <div class="field">
+                      <label>Dosya No</label>
+                      <input id="caseFileNoInput" type="text" placeholder="Örn. 2026/120" />
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                      <button type="submit">Dosya Ekle</button>
+                      <button type="button" class="secondary" id="linkExistingFileBtn">🔗 Kayıtlı Dosyadan Bağla</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="note">
+                  Yeni dosya eklerken aynı <b>mahkeme + dosya no</b> kombinasyonu varsa kayıt engellenir. Dosyaları daha sonra <b>Dosyalar</b> sekmesinden müvekkile de bağlayabilirsiniz.
+                </div>
+              </div>
+
+              <div style="margin-top:18px;">
+                <div id="caseFileEmpty" class="empty">Bu müvekkil için henüz dosya kaydı yok.</div>
+                <div id="caseFileTableWrap" class="table-wrap hidden">
+                  <table class="files-scroll-table">
+                    <thead><tr><th>Birim</th><th>Mahkeme</th><th>Dosya No</th><th>Dosya Türü</th><th>Net</th><th>Aç</th><th>Sil</th></tr></thead>
+                    <tbody id="caseFileTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div id="fileDetailWrap" class="hidden" style="margin-top:20px;">
+                <div class="section-head" style="padding-left:0; padding-right:0; align-items:center;">
+                  <div>
+                    <h3 id="selectedFileTitle">Dosya Detayı</h3>
+                    <p id="selectedFileSubtitle">Dosyaya ait gelir ve masrafları buradan girin.</p>
+                  </div>
+                  <div style="min-width:300px; max-width:360px; width:100%;">
+                    <div class="field" style="margin-bottom:8px;">
+                      <label>Dosya Türü</label>
+                      <select id="fileTypeSelect">
+                        <option value="">Dosya türü seçin</option>
+                      </select>
+                    </div>
+                    <div class="row-stack" style="align-items:center;">
+                      <input id="customFileTypeInput" type="text" placeholder="Dosya türü yazın" style="flex:1; min-width:0; border:1px solid #cbd5e1; background:white; border-radius:16px; padding:12px 14px;" />
+                      <button type="button" class="secondary" id="addCustomFileTypeBtn">Ekle</button>
+                    </div>
+                  </div>
+                  <span class="pill" id="selectedFileBadge">Net: ₺0,00</span>
+                </div>
+
+                <div class="summary-grid" style="margin-top:0; margin-bottom:18px;">
+                  <div class="summary-box"><div class="label">Dosya Geliri</div><div class="value" id="fileIncomeTotal">₺0,00</div></div>
+                  <div class="summary-box"><div class="label">Dosya Masrafı</div><div class="value" id="fileExpenseTotal">₺0,00</div></div>
+                  <div class="summary-box"><div class="label">Dosya Neti</div><div class="value" id="fileNetTotal">₺0,00</div></div>
+                </div>
+
+                <div class="file-notes-grid">
+                  <div class="card" style="border-radius:20px; margin-bottom:0;">
+                    <div class="section-head"><div><h3>Dosya Notları</h3><p>Bu dosyaya ilişkin kısa not, açıklama veya hatırlatma ekleyin.</p></div></div>
+                    <div class="section-body">
+                      <div class="field">
+                        <label>Not</label>
+                        <textarea id="fileNoteInput" rows="5" placeholder="Örn. Bilirkişi raporu bekleniyor, duruşma tarihi değişti, karşı tarafla sulh görüşmesi var." style="width:100%; resize:vertical; border:1px solid #cbd5e1; border-radius:16px; padding:14px; font:inherit; background:#fff;"></textarea>
+                      </div>
+                      <button type="button" id="saveFileNoteBtn">Notu Kaydet</button>
+                    </div>
+                  </div>
+
+                  <div class="card" style="border-radius:20px; margin-bottom:0;">
+                    <div class="section-head"><div><h3>Dosyaya Bağlı Yapılacaklar</h3><p>Bu dosya ile ilişkilendirilen işler burada görünür.</p></div></div>
+                    <div class="section-body">
+                      <div id="fileTaskEmpty" class="empty">Bu dosyaya bağlı yapılacak iş yok.</div>
+                      <div id="fileTaskTableWrap" class="table-wrap hidden">
+                        <table>
+                          <thead><tr><th>İş</th><th>Son Gün</th><th>Tik</th><th>Sil</th></tr></thead>
+                          <tbody id="fileTaskTableBody"></tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="split-2">
+                  <div class="card" style="border-radius:20px;">
+                    <div class="section-head"><div><h3>Dosyaya Gelir Ekle</h3><p>Bu gelir doğrudan seçili dosyaya bağlanır.</p></div></div>
+                    <div class="section-body">
+                      <form id="fileIncomeForm">
+                        <div class="field"><label>Kazanılan</label><input id="fileIncomeAmount" type="number" min="0" step="0.01" placeholder="0,00" /></div>
+                        <div class="field"><label>Tarih</label><input id="fileIncomeDate" type="date" /></div>
+                        <button type="submit">Dosya Geliri Ekle</button>
+                      </form>
+                    </div>
+                  </div>
+
+                  <div class="card" style="border-radius:20px;">
+                    <div class="section-head"><div><h3>Dosyaya Masraf Ekle</h3><p>Bu masraf doğrudan seçili dosyaya bağlanır.</p></div></div>
+                    <div class="section-body">
+                      <form id="fileExpenseForm">
+                        <div class="field"><label>Masraf</label><input id="fileExpenseAmount" type="number" min="0" step="0.01" placeholder="0,00" /></div>
+                        <div class="field"><label>Tarih</label><input id="fileExpenseDate" type="date" /></div>
+                        <button type="submit">Dosya Masrafı Ekle</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="split-2" style="margin-top:18px;">
+                  <div>
+                    <h3 style="margin:0 0 10px;">Dosya Gelirleri</h3>
+                    <div id="fileIncomeEmpty" class="empty">Bu dosyada gelir kaydı yok.</div>
+                    <div id="fileIncomeTableWrap" class="table-wrap hidden">
+                      <table>
+                        <thead><tr><th>Kazanılan</th><th>Tarih</th><th>Sil</th></tr></thead>
+                        <tbody id="fileIncomeTableBody"></tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 style="margin:0 0 10px;">Dosya Masrafları</h3>
+                    <div id="fileExpenseEmpty" class="empty">Bu dosyada masraf kaydı yok.</div>
+                    <div id="fileExpenseTableWrap" class="table-wrap hidden">
+                      <table>
+                        <thead><tr><th>Masraf</th><th>Tarih</th><th>Sil</th></tr></thead>
+                        <tbody id="fileExpenseTableBody"></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="margin-top:18px;">
+                  <h3 style="margin:0 0 10px;">Dosya Beklenen Gelirleri</h3>
+                  <div class="split-2">
+                    <div class="card" style="border-radius:20px;">
+                      <div class="section-head"><div><h3>Beklenen Gelir Ekle</h3><p>Bu dosya için vadesi gelecek geliri buradan ekleyin.</p></div></div>
+                      <div class="section-body">
+                        <form id="fileExpectedIncomeForm">
+                          <div class="field"><label>Beklenen Gelir</label><input id="fileExpectedIncomeAmount" type="number" min="0" step="0.01" placeholder="0,00" /></div>
+                          <div class="field"><label>Vade Tarihi</label><input id="fileExpectedIncomeDueDate" type="date" /></div>
+                          <button type="submit">Beklenen Gelir Ekle</button>
+                        </form>
+                      </div>
+                    </div>
+                    <div>
+                      <div id="fileExpectedIncomeEmpty" class="empty">Bu dosyada beklenen gelir kaydı yok.</div>
+                      <div id="fileExpectedIncomeTableWrap" class="table-wrap hidden">
+                        <table>
+                          <thead><tr><th>Beklenen</th><th>Vade</th><th>Tahsil</th><th>Sil</th></tr></thead>
+                          <tbody id="fileExpectedIncomeTableBody"></tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="fileDetailEmpty" class="empty" style="margin-top:20px;">Bir dosya seçtiğinizde dosya detayı burada açılır.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel hidden" id="panel-company">
+      <div class="grid-2-wide">
+        <div class="card">
+          <div class="section-head">
+            <div>
+              <h3>Şirket Listesi</h3>
+              <p>Şirket ekleyin, arayın ve seçili şirket için finans kayıtlarını yönetin.</p>
+            </div>
+          </div>
+          <div class="section-body">
+            <form id="companyForm">
+              <div class="field">
+                <label>Yeni Şirket</label>
+                <input id="companyNameInput" type="text" placeholder="Örn. Arsan Geri Dönüşüm" />
+              </div>
+              <button type="submit">Şirket Ekle</button>
+            </form>
+            <div class="field" style="margin-top:16px;">
+              <label>Şirket Ara</label>
+              <input id="companySearchInput" type="text" placeholder="Şirket adıyla ara..." />
+            </div>
+            <div id="companyEmpty" class="empty">Henüz şirket kaydı yok.</div>
+            <div id="companyTableWrap" class="table-wrap hidden">
+              <table>
+                <thead><tr><th>Şirket</th><th>Şirket Kasası</th><th>Aç</th><th>Sil</th></tr></thead>
+                <tbody id="companyTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card selected-panel">
+          <div class="section-head">
+            <div class="client-title">
+              <h3 id="selectedCompanyTitle">Şirket Seçilmedi</h3>
+              <p id="selectedCompanySubtitle">Soldaki listeden bir şirket seçin. Masraf, gelen ve vekalet ücreti kayıtlarını burada yönetin.</p>
+            </div>
+            <div class="row-stack">
+              <span class="pill" id="selectedCompanyBadge">Kayıt Sayısı: 0</span>
+              <button type="button" class="secondary no-print" id="selectedCompanyCashBtn">Şirket Kasası: ₺0,00</button>
+            </div>
+          </div>
+          <div class="section-body">
+            <div id="companyDetailEmpty" class="empty">Önce bir şirket seçin.</div>
+
+            <div id="companyDetailWrap" class="hidden">
+              <div class="summary-grid" style="margin-top:0; margin-bottom:18px;">
+                <div class="summary-box"><div class="label">Toplam Masraf</div><div class="value" id="companyExpenseTotal">₺0,00</div></div>
+                <div class="summary-box"><div class="label">Toplam Gelen</div><div class="value" id="companyIncomingTotal">₺0,00</div></div>
+                <div class="summary-box"><div class="label">Net Masraf</div><div class="value" id="companyNetExpenseTotal">₺0,00</div></div>
+              </div>
+
+              <div class="summary-grid" style="margin-top:0; margin-bottom:18px;">
+                <div class="summary-box"><div class="label">Toplam Vekalet</div><div class="value" id="companyFeeTotal">₺0,00</div></div>
+                <div class="summary-box"><div class="label">Şirket Kasası</div><div class="value" id="companyCashTotal">₺0,00</div></div>
+                <div class="summary-box"><div class="label">Toplam Kayıt</div><div class="value" id="companyRecordCount">0</div></div>
+              </div>
+
+              <div class="tabs no-print" style="margin-top:0; margin-bottom:18px;">
+                <button class="tab active" type="button" data-company-tab="expenses" id="companyTabExpensesBtn">Masraflar</button>
+                <button class="tab" type="button" data-company-tab="incoming" id="companyTabIncomingBtn">Gelen</button>
+                <button class="tab" type="button" data-company-tab="fees" id="companyTabFeesBtn">Vekalet Ücreti</button>
+              </div>
+
+              <div id="companySubExpenses">
+                <div class="split-2">
+                  <div class="card" style="border-radius:20px;">
+                    <div class="section-head"><div><h3>Masraf Ekle</h3><p>Şirkete ait masrafı ekleyin. Bu tutar toplam masrafa eklenir.</p></div></div>
+                    <div class="section-body">
+                      <form id="companyExpenseForm">
+                        <div class="field"><label>Açıklama</label><input id="companyExpenseDescription" type="text" placeholder="Örn. Kira, SGK, muhasebe, akaryakıt" /></div>
+                        <div class="field"><label>Masraf</label><input id="companyExpenseAmount" type="number" min="0" step="0.01" placeholder="0,00" /></div>
+                        <div class="field"><label>Tarih</label><input id="companyExpenseDate" type="date" /></div>
+                        <button type="submit">Masraf Ekle</button>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="note">Bu alanda dosyaya bağlı olmayan şirket masraflarını takip edebilirsiniz. Eklenen tüm masraflar toplam masrafa eklenir.</div>
+                </div>
+                <div style="margin-top:18px;">
+                  <h3 style="margin:0 0 10px;">Masraf Listesi</h3>
+                  <div id="companyExpenseEmpty" class="empty">Bu şirkette masraf kaydı yok.</div>
+                  <div id="companyExpenseTableWrap" class="table-wrap hidden">
+                    <table>
+                      <thead><tr><th>Açıklama</th><th>Masraf</th><th>Tarih</th><th>Sil</th></tr></thead>
+                      <tbody id="companyExpenseTableBody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div id="companySubIncoming" class="hidden">
+                <div class="split-2">
+                  <div class="card" style="border-radius:20px;">
+                    <div class="section-head"><div><h3>Gelen Ekle</h3><p>Masraflar için alınan para burada tutulur ve toplam masraftan düşülür.</p></div></div>
+                    <div class="section-body">
+                      <form id="companyIncomingForm">
+                        <div class="field"><label>Açıklama</label><input id="companyIncomingDescription" type="text" placeholder="Örn. Masraf avansı, karşılanan gider" /></div>
+                        <div class="field"><label>Gelen</label><input id="companyIncomingAmount" type="number" min="0" step="0.01" placeholder="0,00" /></div>
+                        <div class="field"><label>Tarih</label><input id="companyIncomingDate" type="date" /></div>
+                        <button type="submit">Gelen Ekle</button>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="note">Gelen kayıtları gelir gibi ayrı sayılmaz; şirket masraf toplamından düşülür ve net masrafı azaltır.</div>
+                </div>
+                <div style="margin-top:18px;">
+                  <h3 style="margin:0 0 10px;">Gelen Listesi</h3>
+                  <div id="companyIncomingEmpty" class="empty">Bu şirkette gelen kaydı yok.</div>
+                  <div id="companyIncomingTableWrap" class="table-wrap hidden">
+                    <table>
+                      <thead><tr><th>Açıklama</th><th>Gelen</th><th>Tarih</th><th>Sil</th></tr></thead>
+                      <tbody id="companyIncomingTableBody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div id="companySubFees" class="hidden">
+                <div class="split-2">
+                  <div class="card" style="border-radius:20px;">
+                    <div class="section-head"><div><h3>Vekalet Ücreti Ekle</h3><p>Tarafınıza ödenen aylık veya dönemsel ücretleri ekleyin.</p></div></div>
+                    <div class="section-body">
+                      <form id="companyFeeForm">
+                        <div class="field"><label>Açıklama</label><input id="companyFeeDescription" type="text" placeholder="Örn. Nisan 2026 aylık vekalet ücreti" /></div>
+                        <div class="field"><label>Vekalet Ücreti</label><input id="companyFeeAmount" type="number" min="0" step="0.01" placeholder="0,00" /></div>
+                        <div class="field"><label>Tarih</label><input id="companyFeeDate" type="date" /></div>
+                        <button type="submit">Vekalet Ücreti Ekle</button>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="note">Eklenen vekalet ücretleri genel toplam kazanılan hesabına da dahil edilir.</div>
+                </div>
+                <div style="margin-top:18px;">
+                  <h3 style="margin:0 0 10px;">Vekalet Ücreti Listesi</h3>
+                  <div id="companyFeeEmpty" class="empty">Bu şirkette vekalet ücreti kaydı yok.</div>
+                  <div id="companyFeeTableWrap" class="table-wrap hidden">
+                    <table>
+                      <thead><tr><th>Açıklama</th><th>Vekalet Ücreti</th><th>Tarih</th><th>Sil</th></tr></thead>
+                      <tbody id="companyFeeTableBody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel hidden" id="panel-files">
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h3 id="filesMainTitle">Açık Dosyalar</h3>
+            <p>Dosyaya tıklayınca detay açılır. Yeni dosya ekleyebilir, kapalı arşive taşıyabilirsiniz.</p>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <button type="button" id="showAddFileFormBtn">+ Dosya Ekle</button>
+            <button type="button" class="secondary" id="showOpenFilesBtn" style="display:none;">📂 Açık Dosyalar</button>
+            <button type="button" class="secondary" id="showClosedFilesBtn">🗄️ Kapalı Dosyalar <span id="closedFilesCount" style="background:#64748b;color:white;border-radius:99px;padding:1px 7px;font-size:12px;margin-left:4px;">0</span></button>
+          </div>
+        </div>
+
+        <!-- Dosya Ekleme Formu -->
+        <div id="addFileFormWrap" class="hidden" style="padding:16px 20px;border-bottom:1px solid #eff6ff;background:#f8fafc;">
+          <form id="standaloneFileForm" style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;">
+            <div class="field" style="flex:1;min-width:160px;margin-bottom:0;">
+              <label>Müvekkil (isteğe bağlı)</label>
+              <input id="sfClientInput" type="text" placeholder="Müvekkil adı" list="sfClientList" autocomplete="off" />
+              <datalist id="sfClientList"></datalist>
+            </div>
+            <div class="field" style="flex:2;min-width:200px;margin-bottom:0;">
+              <label>Mahkeme</label>
+              <input id="sfCourtInput" type="text" placeholder="Örn. Bursa 3. İş Mahkemesi" />
+            </div>
+            <div class="field" style="flex:1;min-width:120px;margin-bottom:0;">
+              <label>Dosya No</label>
+              <input id="sfFileNoInput" type="text" placeholder="Örn. 2026/120" />
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button type="submit">Ekle</button>
+              <button type="button" class="secondary" id="cancelAddFileBtn">İptal</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="section-body">
+          <div class="files-panel-grid">
+            <div>
+              <div class="files-search-row no-print" id="filesSearchRow">
+                <div class="field">
+                  <label>Dosya Ara</label>
+                  <input id="allFilesSearchInput" type="text" placeholder="Müvekkil, mahkeme, dosya no ile ara" />
+                </div>
+                <button type="button" id="allFilesSearchBtn">Ara</button>
+                <button type="button" class="secondary" id="allFilesSearchClearBtn">Temizle</button>
+              </div>
+              <div id="allFilesEmpty" class="empty">Henüz dosya kaydı yok.</div>
+              <div id="allFilesTableWrap" class="table-wrap hidden">
+                <table class="files-scroll-table">
+                  <thead><tr><th>Müvekkil</th><th>Kapalı?</th><th>Mahkeme</th><th>Dosya No</th><th>Gelir</th><th>Masraf</th><th>Net</th></tr></thead>
+                  <tbody id="allFilesTableBody"></tbody>
+                </table>
+              </div>
+
+              <!-- Kapalı Dosyalar Bölümü -->
+              <div id="closedFilesSection" class="hidden">
+                <div id="closedFilesEmpty" class="empty">Kapalı dosya yok.</div>
+                <div id="closedFilesTableWrap" class="table-wrap hidden">
+                  <table class="files-scroll-table">
+                    <thead><tr><th>Müvekkil</th><th>Yeniden Aç</th><th>Mahkeme</th><th>Dosya No</th><th>Gelir</th><th>Masraf</th><th>Net</th></tr></thead>
+                    <tbody id="closedFilesTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Dosya Detay (inline açılır) -->
+              <div id="filesTabFileDetail" class="hidden" style="margin-top:20px;border-top:2px solid #bfdbfe;padding-top:18px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                  <h3 id="filesTabFileTitle" style="margin:0;color:#1e3a8a;"></h3>
+                  <button type="button" class="secondary" id="filesTabFileDetailCloseBtn">✕ Kapat</button>
+                </div>
+                <!-- Dosya detay içeriği müvekkil panelindekiyle aynı yapıda -->
+                <div class="summary-grid" style="margin-bottom:16px;">
+                  <div class="summary-box"><div class="label">Dosya Geliri</div><div class="value" id="ftFileIncomeTotal">₺0,00</div></div>
+                  <div class="summary-box"><div class="label">Dosya Masrafı</div><div class="value" id="ftFileExpenseTotal">₺0,00</div></div>
+                  <div class="summary-box"><div class="label">Net</div><div class="value" id="ftFileNetTotal">₺0,00</div></div>
+                </div>
+                <div class="split-2">
+                  <div class="card" style="border-radius:20px;">
+                    <div class="section-head"><div><h3>Gelir Ekle</h3></div></div>
+                    <div class="section-body">
+                      <form id="ftFileIncomeForm">
+                        <div class="field"><label>Tutar</label><input id="ftFileIncomeAmount" type="number" min="0" step="0.01" placeholder="0,00" /></div>
+                        <div class="field"><label>Tarih</label><input id="ftFileIncomeDate" type="date" /></div>
+                        <button type="submit">Gelir Ekle</button>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="card" style="border-radius:20px;">
+                    <div class="section-head"><div><h3>Masraf Ekle</h3></div></div>
+                    <div class="section-body">
+                      <form id="ftFileExpenseForm">
+                        <div class="field"><label>Tutar</label><input id="ftFileExpenseAmount" type="number" min="0" step="0.01" placeholder="0,00" /></div>
+                        <div class="field"><label>Tarih</label><input id="ftFileExpenseDate" type="date" /></div>
+                        <button type="submit">Masraf Ekle</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-top:16px;">
+                  <h4 style="margin:0 0 8px;">Gelir Kayıtları</h4>
+                  <div id="ftFileIncomeEmpty" class="empty">Gelir kaydı yok.</div>
+                  <div id="ftFileIncomeWrap" class="table-wrap hidden">
+                    <table><thead><tr><th>Tutar</th><th>Tarih</th><th>Sil</th></tr></thead><tbody id="ftFileIncomeBody"></tbody></table>
+                  </div>
+                  <h4 style="margin:16px 0 8px;">Masraf Kayıtları</h4>
+                  <div id="ftFileExpenseEmpty" class="empty">Masraf kaydı yok.</div>
+                  <div id="ftFileExpenseWrap" class="table-wrap hidden">
+                    <table><thead><tr><th>Tutar</th><th>Tarih</th><th>Sil</th></tr></thead><tbody id="ftFileExpenseBody"></tbody></table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="no-print row-stack" style="margin-top:16px;" id="fileActionButtons">
+                <label class="btn secondary" for="pdfImportInput">PDF'ten İçe Aktar</label>
+                <input id="pdfImportInput" type="file" accept="application/pdf,.pdf" class="hidden" />
+                <button type="button" class="red" id="clearFilesBtn">Dosyaları Sil</button>
+              </div>
+            </div>
+            <div class="card files-filter-card no-print" style="border-radius:20px;">
+              <div class="section-head"><div><h3>Kategoriler</h3><p>Mahkeme sütununa göre filtreler.</p></div></div>
+              <div class="section-body">
+                <div class="files-filter-buttons" id="fileCategoryButtons"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section class="tab-panel hidden" id="panel-upcoming">
+      <div class="card">
+        <div class="section-head"><div><h3>Yaklaşan İşler</h3><p>Son günü 7 gün ve daha az kalan işler burada görünür.</p></div></div>
+        <div class="section-body">
+          <div id="upcomingSoonEmpty" class="empty">Yaklaşan iş yok.</div>
+          <div id="upcomingSoonWrap" class="table-wrap hidden">
+            <table>
+              <thead><tr><th>İş</th><th>Tarih</th><th>Son Gün</th><th>Durum</th><th>Tik</th></tr></thead>
+              <tbody id="upcomingSoonBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel hidden" id="panel-tasks">
+      <div class="grid-2">
+        <div class="card">
+          <div class="section-head"><div><h3>Yeni İş Ekle</h3><p>İş başlığı, yapılacağı tarih ve son günü girin.</p></div></div>
+          <div class="section-body">
+            <form id="taskForm">
+              <div class="field"><label>Yapılacak İş</label><input id="taskTitle" type="text" placeholder="Örn. Duruşma dilekçesi hazırla" /></div>
+              <div class="field"><label>Tarih</label><input id="taskDate" type="date" /></div>
+              <div class="field"><label>Son Gün / Deadline</label><input id="taskDeadline" type="date" /></div>
+              <div class="field">
+                <label>Dosyaya Bağla (isteğe bağlı)</label>
+                <div class="file-search-wrap" id="taskFormFileWrap">
+                  <input type="text" id="taskFormFileSearch" placeholder="Mahkeme veya dosya no ara…" autocomplete="off" />
+                  <div class="file-search-dropdown hidden" id="taskFormFileDropdown"></div>
+                  <div id="taskFormFileSelected" class="file-search-selected hidden">
+                    <span id="taskFormFileSelectedLabel"></span>
+                    <button type="button" id="taskFormFileClear">✕</button>
+                  </div>
+                </div>
+                <input type="hidden" id="taskFormFileId" />
+              </div>
+              <button type="submit">İş Ekle</button>
+            </form>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-head"><div><h3>Yapılacaklar Listesi</h3><p>Sağdaki kutucuktan tamamlandı olarak işaretleyebilirsiniz.</p></div></div>
+          <div class="section-body" style="padding:0;">
+            <div id="taskEmpty" class="empty" style="margin:16px;">Henüz kayıtlı iş yok.</div>
+            <div id="taskTableWrap" class="table-wrap hidden" style="max-height:520px; overflow:auto;">
+              <table class="task-compact-table">
+                <thead><tr><th>Yapılacak İş</th><th>Tarih</th><th>Son Gün</th><th>Dosya</th><th>✓</th><th>Sil</th></tr></thead>
+                <tbody id="taskTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel hidden" id="panel-party">
+      <div class="grid-2">
+        <div class="card">
+          <div class="section-head"><div><h3>Parti İşleri</h3><p>Parti ile ilgili kısa not ve işleri buraya ekleyin.</p></div></div>
+          <div class="section-body">
+            <form id="partyForm">
+              <div class="field"><label>Parti İşleri</label><input id="partyInput" type="text" placeholder="Parti işini yazın" /></div>
+              <button type="submit">+</button>
+            </form>
+            <div id="partyEmpty" class="empty">Henüz parti işi yok.</div>
+            <div id="partyTableWrap" class="table-wrap hidden">
+              <table>
+                <thead><tr><th>Parti İşleri</th><th>Sil</th></tr></thead>
+                <tbody id="partyTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-head"><div><h3>Şahsi İşler</h3><p>Kişisel not ve işlerinizi ayrı olarak buraya ekleyin.</p></div></div>
+          <div class="section-body">
+            <form id="personalForm">
+              <div class="field"><label>Şahsi İşler</label><input id="personalInput" type="text" placeholder="Şahsi işinizi yazın" /></div>
+              <button type="submit">+</button>
+            </form>
+            <div id="personalEmpty" class="empty">Henüz şahsi iş yok.</div>
+            <div id="personalTableWrap" class="table-wrap hidden">
+              <table>
+                <thead><tr><th>Şahsi İşler</th><th>Sil</th></tr></thead>
+                <tbody id="personalTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel hidden" id="panel-expenses">
+      <div class="grid-2">
+        <div class="card">
+          <div class="section-head"><div><h3>Masraf Ekle</h3><p>Müvekkil, dosya, masraf tutarı ve tarih girin.</p></div></div>
+          <div class="section-body">
+            <form id="expenseForm">
+              <div class="field"><label>Müvekkil Seç</label><select id="expenseClientSelect"><option value="">Müvekkil seçin</option></select></div>
+              <div class="field"><label>Veya Manuel Müvekkil Yaz</label><input id="expenseClientInput" type="text" placeholder="Örn. Ahmet Yılmaz" /></div>
+              <div class="field"><label>Dosya Seç</label><select id="expenseFileSelect"><option value="">Dosya seçin (opsiyonel)</option></select></div>
+              <div class="field"><label>Masraf</label><input id="expenseAmount" type="number" min="0" step="0.01" placeholder="0,00" /></div>
+              <div class="field"><label>Tarih</label><input id="expenseDate" type="date" /></div>
+              <button type="submit">Masraf Ekle</button>
+            </form>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-head"><div><h3>Masraf Listesi</h3><p>Masraflar kasa hesabına otomatik yansır.</p></div></div>
+          <div class="section-body">
+            <div id="expenseEmpty" class="empty">Henüz kayıtlı masraf yok.</div>
+            <div id="expenseTableWrap" class="table-wrap hidden">
+              <table>
+                <thead><tr><th>Müvekkil</th><th>Dosya</th><th>Masraf</th><th>Tarih</th><th>Sil</th></tr></thead>
+                <tbody id="expenseTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel hidden" id="panel-income">
+      <div class="grid-3">
+        <div class="card">
+          <div class="section-head"><div><h3>Gelir Ekle</h3><p>Müvekkil, dosya, kazanılan tutar ve tarih girin.</p></div></div>
+          <div class="section-body">
+            <form id="incomeForm">
+              <div class="field"><label>Müvekkil Seç</label><select id="incomeClientSelect"><option value="">Müvekkil seçin</option></select></div>
+              <div class="field"><label>Veya Manuel Müvekkil Yaz</label><input id="incomeClientInput" type="text" placeholder="Örn. Ayşe Kaya" /></div>
+              <div class="field"><label>Dosya Seç</label><select id="incomeFileSelect"><option value="">Dosya seçin (opsiyonel)</option></select></div>
+              <div class="field"><label>Kazanılan</label><input id="incomeAmount" type="number" min="0" step="0.01" placeholder="0,00" /></div>
+              <div class="field"><label>Tahsilat Tarihi</label><input id="incomeDate" type="date" /></div>
+              <button type="submit">Gelir Ekle</button>
+            </form>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-head"><div><h3>Gelir Listesi</h3><p>Bu kayıtlar kasaya ve aylık net gelire otomatik işlenir.</p></div></div>
+          <div class="section-body">
+            <div id="incomeEmpty" class="empty">Henüz kayıtlı gelir yok.</div>
+            <div id="incomeTableWrap" class="table-wrap hidden">
+              <table>
+                <thead><tr><th>Müvekkil</th><th>Dosya</th><th>Kazanılan</th><th>Tahsilat Tarihi</th><th>Sil</th></tr></thead>
+                <tbody id="incomeTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-head"><div><h3>Beklenen Gelirler</h3><p>İleride tahsil edilecek gelirleri vade tarihiyle ekleyin. Tahsil edildiğinde tikleyip gerçek gelir listesine taşıyın.</p></div></div>
+          <div class="section-body">
+            <div id="expectedIncomeEmpty" class="empty">Henüz beklenen gelir yok.</div>
+            <div id="expectedIncomeTableWrap" class="table-wrap hidden" style="margin-bottom:16px;">
+              <table>
+                <thead><tr><th>Müvekkil</th><th>Dosya</th><th>Tutar</th><th>Vade</th><th>Tahsil</th><th>Sil</th></tr></thead>
+                <tbody id="expectedIncomeTableBody"></tbody>
+              </table>
+            </div>
+            <form id="expectedIncomeForm">
+              <div class="field"><label>Müvekkil Seç</label><select id="expectedIncomeClientSelect"><option value="">Müvekkil seçin</option></select></div>
+              <div class="field"><label>Veya Manuel Müvekkil Yaz</label><input id="expectedIncomeClientInput" type="text" placeholder="Örn. Ayşe Kaya" /></div>
+              <div class="field"><label>Dosya Seç</label><select id="expectedIncomeFileSelect"><option value="">Dosya seçin (opsiyonel)</option></select></div>
+              <div class="field"><label>Beklenen Gelir</label><input id="expectedIncomeAmount" type="number" min="0" step="0.01" placeholder="0,00" /></div>
+              <div class="field"><label>Vade Tarihi</label><input id="expectedIncomeDueDate" type="date" /></div>
+              <button type="submit">Beklenen Gelir Ekle</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel hidden" id="panel-cash">
+      <div class="grid-2">
+        <div class="card">
+          <div class="section-head"><div><h3>Kasa Ayarları</h3><p>Başlangıç değerini istediğiniz zaman değiştirebilirsiniz.</p></div></div>
+          <div class="section-body">
+            <div class="field"><label>Başlangıç Kasa Değeri</label><input id="startingBalance" type="number" step="0.01" value="0" /></div>
+            <div class="note">Kasa hesabı otomatik olarak <b>başlangıç + kazanılan - masraf</b> formülüyle çalışır.</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-head"><div><h3>Tarih Aralığına Göre Net Kazanç</h3><p>Belirli dönemler için gelir, masraf ve net sonucu görüntüleyin.</p></div></div>
+          <div class="section-body">
+            <div style="display:grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px;">
+              <div class="field"><label>Başlangıç Tarihi</label><input id="rangeStart" type="date" /></div>
+              <div class="field"><label>Bitiş Tarihi</label><input id="rangeEnd" type="date" /></div>
+              <div class="field" style="display:flex; align-items:end;"><button id="clearFilterBtn" type="button">Filtreyi Temizle</button></div>
+            </div>
+            <div class="summary-grid">
+              <div class="summary-box"><div class="label">Seçili Aralık Geliri</div><div class="value" id="rangeIncome">₺0,00</div></div>
+              <div class="summary-box"><div class="label">Seçili Aralık Masrafı</div><div class="value" id="rangeExpense">₺0,00</div></div>
+              <div class="summary-box"><div class="label">Seçili Aralık Neti</div><div class="value" id="rangeNet">₺0,00</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:20px;">
+        <div class="section-head"><div><h3>Aylık Geçmiş</h3><p>Her ay sonunda net gelirinizi ay bazlı görebilirsiniz.</p></div></div>
+        <div class="section-body">
+          <div id="historyEmpty" class="empty">Aylık geçmiş için henüz gelir veya masraf kaydı yok.</div>
+          <div id="historyTableWrap" class="table-wrap hidden">
+            <table>
+              <thead><tr><th>Ay</th><th>Toplam Gelir</th><th>Toplam Masraf</th><th>Net Kazanç</th></tr></thead>
+              <tbody id="historyTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel hidden" id="panel-agenda">
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h3>📅 30 Günlük Ajanda</h3>
+            <p>Her gün için 7 satır not alanı. Tamamlanan işleri tiklayebilirsiniz.</p>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <button type="button" class="secondary" id="agendaPrevBtn">◀ Önceki</button>
+            <span id="agendaRangeLabel" style="font-weight:700;font-size:15px;white-space:nowrap;"></span>
+            <button type="button" class="secondary" id="agendaNextBtn">Sonraki ▶</button>
+            <button type="button" id="agendaTodayBtn">Bugün</button>
+          </div>
+        </div>
+        <div class="section-body" style="padding:16px;">
+          <div id="agendaGrid" style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <div id="taskFilePickerModal" class="modal-backdrop hidden no-print">
+      <div class="modal-card">
+        <div class="section-head">
+          <div>
+            <h3>İşe Dosya Bağla</h3>
+            <p>Arama yaparak ilgili dosyayı seçin. Böylece iş, dosya detay ekranında da görünür.</p>
+          </div>
+          <button type="button" class="secondary" id="closeTaskFilePickerBtn">Kapat</button>
+        </div>
+        <div class="section-body">
+          <div class="field">
+            <label>Dosya Ara</label>
+            <input id="taskFileSearchInput" type="text" placeholder="Dosya adı veya müvekkil adı ile ara..." />
+          </div>
+          <div class="row-stack" style="margin-bottom:14px;">
+            <button type="button" class="secondary" id="clearTaskFileLinkBtn">Bağlantıyı Kaldır</button>
+          </div>
+          <div id="taskFilePickerEmpty" class="empty">Eşleşen dosya bulunamadı.</div>
+          <div id="taskFilePickerList" class="search-list hidden"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+const DEFAULT_FILE_TYPES = ['Alacak', 'Tazminat', 'Boşanma', 'İcra', 'İdare', 'Mal Paylaşımı', 'Menfi Tespit', 'İtirazın İptali'];
+const STORAGE_KEY = 'ofis-takip-standalone-v6';
+const LEGACY_KEYS = ['ofis-takip-standalone-v5', 'ofis-takip-standalone-v4'];
+const FILE_CATEGORIES = ['Asliye Hukuk', 'Asliye Ticaret', 'Aile', 'İş', 'İcra', 'Ağır Ceza', 'Asliye Ceza', 'İdari Yargı', 'Sulh Hukuk', 'İcra Hukuk', 'Tüketici'];
+
+// ── Supabase ──────────────────────────────────────────────
+const SB_URL  = 'https://tjekjwzbykprdlxmrtsw.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqZWtqd3pieWtwcmRseG1ydHN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMjkzNDMsImV4cCI6MjA5MzgwNTM0M30.ZtmykOXBzHPnqYWgZyl6HqE7HF_cjvBLNH2qz3fxtXA';
+const SB_HEADERS = { 'Content-Type': 'application/json', 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Prefer': 'return=minimal' };
+
+let syncTimer = null;
+let syncStatus = 'idle'; // idle | saving | saved | error
+
+function setSyncStatus(s, msg) {
+  syncStatus = s;
+  const el = document.getElementById('syncStatus');
+  if (!el) return;
+  const icons = { idle: '☁️', saving: '⏳', saved: '✅', error: '⚠️' };
+  const labels = { idle: 'Bulut', saving: 'Kaydediliyor…', saved: 'Kaydedildi', error: 'Bağlantı hatası' };
+  el.textContent = (icons[s] || '☁️') + ' ' + (msg || labels[s] || '');
+  el.style.color = s === 'error' ? '#dc2626' : s === 'saved' ? '#059669' : '#475569';
+}
+
+async function pushToSupabase() {
+  setSyncStatus('saving');
+  try {
+    const res = await fetch(SB_URL + '/rest/v1/ofis_data?id=eq.main', {
+      method: 'PATCH',
+      headers: SB_HEADERS,
+      body: JSON.stringify({ data: state, updated_at: new Date().toISOString() })
+    });
+    if (!res.ok) throw new Error(res.status);
+    setSyncStatus('saved');
+    setTimeout(() => setSyncStatus('idle'), 2500);
+  } catch (err) {
+    setSyncStatus('error', 'Hata – yerel kaydedildi');
+  }
+}
+
+async function pullFromSupabase() {
+  setSyncStatus('saving', 'Yükleniyor…');
+  try {
+    const res = await fetch(SB_URL + '/rest/v1/ofis_data?id=eq.main&select=data,updated_at', {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    });
+    if (!res.ok) throw new Error(res.status);
+    const rows = await res.json();
+    if (rows && rows.length && rows[0].data && Object.keys(rows[0].data).length) {
+      const parsed = rows[0].data;
+      Object.assign(state, {
+        clients: parsed.clients || [],
+        clientFiles: Array.isArray(parsed.clientFiles) ? parsed.clientFiles.map(migrateClientFileRecord).filter(item => getFileCourt(item) || getFileNumber(item)) : [],
+        fileTypes: Array.isArray(parsed.fileTypes) && parsed.fileTypes.length ? parsed.fileTypes : [...DEFAULT_FILE_TYPES],
+        tasks: parsed.tasks || [],
+        partyItems: parsed.partyItems || [],
+        personalItems: parsed.personalItems || [],
+        expenses: parsed.expenses || [],
+        incomes: parsed.incomes || [],
+        expectedIncomes: parsed.expectedIncomes || [],
+        companies: parsed.companies || [],
+        companyExpenses: parsed.companyExpenses || [],
+        companyIncoming: parsed.companyIncoming || [],
+        companyFees: parsed.companyFees || [],
+        startingBalance: Number(parsed.startingBalance || 0),
+        agendaEntries: parsed.agendaEntries || {},
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      render();
+      setSyncStatus('saved', 'Senkronize edildi');
+      setTimeout(() => setSyncStatus('idle'), 2500);
+    } else {
+      // Bulut boş — mevcut yerel veriyi buluta yükle
+      await pushToSupabase();
+    }
+  } catch(err) {
+    setSyncStatus('error', 'Buluta bağlanılamadı');
+  }
+}
+
+const defaultState = {
+  clients: [],
+  clientFiles: [],
+  fileTypes: [...DEFAULT_FILE_TYPES],
+  tasks: [],
+  partyItems: [],
+  personalItems: [],
+  expenses: [],
+  incomes: [],
+  expectedIncomes: [],
+  companies: [],
+  companyExpenses: [],
+  companyIncoming: [],
+  companyFees: [],
+  startingBalance: 0,
+  agendaEntries: {},
+};
+const state = loadState();
+const ui = {
+  selectedClient: '',
+  selectedFileId: '',
+  selectedCompany: '',
+  companyTab: 'expenses',
+  taskPickerTaskId: '',
+  fileCategory: '',
+};
+
+function loadState() {
+  const keys = [STORAGE_KEY, ...LEGACY_KEYS];
+  for (const key of keys) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) continue;
+      const parsed = JSON.parse(raw);
+      return {
+        clients: parsed.clients || [],
+        clientFiles: Array.isArray(parsed.clientFiles) ? parsed.clientFiles.map(migrateClientFileRecord).filter(item => getFileCourt(item) || getFileNumber(item)) : [],
+        fileTypes: Array.isArray(parsed.fileTypes) && parsed.fileTypes.length ? parsed.fileTypes : [...DEFAULT_FILE_TYPES],
+        tasks: parsed.tasks || [],
+        partyItems: parsed.partyItems || [],
+        personalItems: parsed.personalItems || [],
+        expenses: parsed.expenses || [],
+        incomes: parsed.incomes || [],
+        expectedIncomes: parsed.expectedIncomes || [],
+        companies: parsed.companies || [],
+        companyExpenses: parsed.companyExpenses || [],
+        companyIncoming: parsed.companyIncoming || [],
+        companyFees: parsed.companyFees || [],
+        startingBalance: Number(parsed.startingBalance || 0),
+        agendaEntries: parsed.agendaEntries || {},
+      };
+    } catch {}
+  }
+  return JSON.parse(JSON.stringify(defaultState));
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  // Buluta gönderimi 1.5 sn beklet (art arda yazışları birleştir)
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => pushToSupabase(), 1500);
+}
+function fmtMoney(value) {
+  return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 2 }).format(Number(value || 0));
+}
+function todayStr() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+function parseDateLocal(dateStr) {
+  if (!dateStr) return null;
+  const [year, month, day] = String(dateStr).split('-').map(Number);
+  if (!year || !month || !day) return null;
+  return new Date(year, month - 1, day);
+}
+function deadlineDiffDays(dateStr) {
+  const target = parseDateLocal(dateStr);
+  const today = parseDateLocal(todayStr());
+  if (!target || !today) return null;
+  return Math.round((target - today) / 86400000);
+}
+function deadlineStatusText(dateStr) {
+  const diff = deadlineDiffDays(dateStr);
+  if (diff === null) return '-';
+  if (diff < 0) return `${Math.abs(diff)} gün geçti`;
+  if (diff === 0) return 'Bugün';
+  return `${diff} gün kaldı`;
+}
+function monthLabel(monthKey) {
+  const [year, month] = monthKey.split('-');
+  return new Date(Number(year), Number(month) - 1, 1).toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' });
+}
+function sum(arr, field) { return arr.reduce((acc, item) => acc + Number(item[field] || 0), 0); }
+function escapeHtml(str) {
+  return String(str || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+function normalizeCompareText(str) {
+  return String(str || '')
+    .toLocaleLowerCase('tr')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9çğıöşü]+/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+function normalizeFileNoText(str) {
+  return String(str || '')
+    .replace(/\s+/g, '')
+    .replace(/[–—]/g, '-')
+    .toLocaleUpperCase('tr');
+}
+function extractCanonicalFileNo(str) {
+  const source = String(str || '').replace(/[–—]/g, '-').replace(/\s+/g, ' ').trim();
+  if (!source) return '';
+  const baseMatch = source.match(/\b(\d{4})\s*\/\s*(\d+)\b/i);
+  if (!baseMatch) return '';
+  let result = `${baseMatch[1]}/${baseMatch[2]}`;
+  const tail = source.slice((baseMatch.index || 0) + baseMatch[0].length).trim();
+  const tailUpper = tail
+    .toLocaleUpperCase('tr')
+    .replace(/DEGİSİK/g, 'DEĞİŞİK')
+    .replace(/DEGISIK/g, 'DEĞİŞİK')
+    .replace(/IS/g, 'İŞ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const suffixRules = [
+    [/^(D\.?\s*İŞ|DEĞİŞİK\s*İŞ)\b/, 'D.İŞ'],
+    [/^(E|ESAS)\b\.?/, 'E.'],
+    [/^(K|KARAR)\b\.?/, 'K.'],
+    [/^(D|DAVA)\b\.?/, 'D.'],
+    [/^(T|TEVZİ)\b\.?/, 'T.'],
+  ];
+  const suffix = suffixRules.find(([pattern]) => pattern.test(tailUpper));
+  if (suffix) result += ` ${suffix[1]}`;
+  return normalizeFileNoText(result);
+}
+function getComparableFileNo(str) {
+  return extractCanonicalFileNo(str) || normalizeFileNoText(str);
+}
+function getFileUnit(file) { return String(file?.unit || '').trim(); }
+function getFileCourt(file) { return String(file?.court || file?.name || '').trim(); }
+function getFileNumber(file) { return String(file?.fileNo || '').trim(); }
+function getFileDisplayName(file) {
+  const parts = [getFileCourt(file), getFileNumber(file)].filter(Boolean);
+  return parts.length ? parts.join(' / ') : String(file?.name || '').trim() || '-';
+}
+function getFileUniqueKey(court, fileNo) {
+  return `${normalizeCompareText(court)}__${getComparableFileNo(fileNo)}`;
+}
+function isDuplicateFileEntry(court, fileNo, exceptId = '') {
+  const targetKey = getFileUniqueKey(court, fileNo);
+  if (!normalizeCompareText(court) || !getComparableFileNo(fileNo)) return false;
+  return state.clientFiles.some(item => item.id !== exceptId && getFileUniqueKey(getFileCourt(item), getFileNumber(item)) === targetKey);
+}
+function migrateClientFileRecord(item) {
+  const unit = String(item?.unit || '').trim();
+  const court = String(item?.court || item?.name || '').trim();
+  const fileNo = getComparableFileNo(String(item?.fileNo || '').trim());
+  const name = getFileDisplayName({ court, fileNo, name: String(item?.name || '').trim() });
+  return {
+    id: item?.id || crypto.randomUUID(),
+    client: String(item?.client || '').trim(),
+    unit,
+    court,
+    fileNo,
+    name,
+    note: String(item?.note || '').trim(),
+    fileType: String(item?.fileType || '').trim(),
+  };
+}
+function setFileClient(fileId, clientName) {
+  const file = getFileById(fileId);
+  if (!file) return;
+  file.client = String(clientName || '').trim();
+}
+function buildImportedFileRecord({ client = '', unit = '', court = '', fileNo = '', note = '', fileType = '' }) {
+  return migrateClientFileRecord({ id: crypto.randomUUID(), client, unit, court, fileNo, note, fileType, name: [court, fileNo].filter(Boolean).join(' / ') });
+}
+function buildSelectOptionsHtml(currentValue = '') {
+  const options = ['<option value="">Müvekkil seç</option>'];
+  [...state.clients].sort((a, b) => a.localeCompare(b, 'tr')).forEach(client => {
+    const selected = client === currentValue ? ' selected' : '';
+    options.push(`<option value="${escapeHtml(client)}"${selected}>${escapeHtml(client)}</option>`);
+  });
+  return options.join('');
+}
+function normalizePdfLine(line) {
+  return String(line || '').replace(/\s+/g, ' ').trim();
+}
+function isPdfHeaderLabel(value) {
+  const normalized = normalizeCompareText(value);
+  return ['birim', 'mahkeme', 'dosya no', 'dosya nosu', 'dosya turu', 'dosya tipi'].includes(normalized);
+}
+function parsePdfEntryFromLine(line) {
+  const raw = String(line || '').replace(/ /g, ' ').trim();
+  if (!raw) return null;
+  const clean = raw.replace(/\s+/g, ' ').trim();
+  if (isPdfHeaderLabel(clean)) return null;
+  const fileNoBaseMatch = clean.match(/\b\d{4}\s*\/\s*\d+\b/i);
+  if (!fileNoBaseMatch) return null;
+  const fileNo = extractCanonicalFileNo(clean.slice(fileNoBaseMatch.index || 0));
+  const pre = clean.slice(0, fileNoBaseMatch.index).replace(/^\d+\s*[.)-]?\s*/, '').trim();
+  if (!pre || !fileNo) return null;
+  const rawCols = raw.split(/\s{3,}|	+/).map(part => normalizePdfLine(part)).filter(Boolean);
+  const cols = rawCols.filter(col => !isPdfHeaderLabel(col));
+  let unit = '';
+  let court = '';
+  const fileIndex = cols.findIndex(col => /\b\d{4}\s*\/\s*\d+\b/i.test(col));
+  if (fileIndex >= 1) {
+    const before = cols.slice(0, fileIndex);
+    if (before.length >= 2) {
+      unit = before[0] || '';
+      court = before[1] || '';
+    } else {
+      court = before[0] || '';
+    }
+  }
+  if (!court) {
+    const preCols = pre.split(/\s{2,}|	+/).map(part => normalizePdfLine(part)).filter(Boolean);
+    if (preCols.length >= 2) {
+      unit = preCols[0] || '';
+      court = preCols[1] || '';
+    } else {
+      court = pre;
+    }
+  }
+  unit = normalizePdfLine(unit);
+  court = normalizePdfLine(court);
+  if (!court || !fileNo) return null;
+  return { unit, court, fileNo };
+}
+async function extractPdfTextLines(file) {
+  const [{ getDocument, GlobalWorkerOptions }] = await Promise.all([
+    import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/build/pdf.min.mjs'),
+  ]);
+  GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/build/pdf.worker.min.mjs';
+  const buffer = await file.arrayBuffer();
+  const pdf = await getDocument({ data: buffer }).promise;
+  const lines = [];
+  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+    const page = await pdf.getPage(pageNum);
+    const content = await page.getTextContent();
+    const groups = new Map();
+    content.items.forEach(item => {
+      const y = Math.round(item.transform[5]);
+      if (!groups.has(y)) groups.set(y, []);
+      groups.get(y).push({ x: item.transform[4], str: String(item.str || '').trim() });
+    });
+    [...groups.entries()]
+      .sort((a, b) => b[0] - a[0])
+      .forEach(([, items]) => {
+        const sorted = items.filter(item => item.str).sort((a, b) => a.x - b.x);
+        let lastX = null;
+        let line = '';
+        sorted.forEach(item => {
+          if (lastX !== null) {
+            const gap = item.x - lastX;
+            line += gap > 30 ? '   ' : ' ';
+          }
+          line += item.str;
+          lastX = item.x + (item.str.length * 4.5);
+        });
+        const normalized = line.replace(/\s+/g, ' ').trim();
+        if (normalized) lines.push(line.trim());
+      });
+  }
+  return lines;
+}
+async function importFilesFromPdf(file) {
+  const lines = await extractPdfTextLines(file);
+  const found = [];
+  const seenInPdf = new Set();
+  lines.forEach((line, index) => {
+    const candidates = [line, `${line} ${lines[index + 1] || ''}`.trim()];
+    candidates.forEach(candidate => {
+      const parsed = parsePdfEntryFromLine(candidate);
+      if (!parsed) return;
+      const key = getFileUniqueKey(parsed.court, parsed.fileNo);
+      if (!key || seenInPdf.has(key)) return;
+      seenInPdf.add(key);
+      found.push(parsed);
+    });
+  });
+  if (!found.length) {
+    setMessage('PDF içinde Birim, Mahkeme ve Dosya No alanları okunamadı.');
+    return;
+  }
+  let imported = 0;
+  let skipped = 0;
+  found.forEach(item => {
+    if (isDuplicateFileEntry(item.court, item.fileNo)) {
+      skipped += 1;
+      return;
+    }
+    state.clientFiles.unshift(buildImportedFileRecord(item));
+    imported += 1;
+  });
+  render();
+  setMessage(`${imported} dosya PDF'ten içe aktarıldı. PDF'teki dosya türü sütunu yok sayıldı. Dosya No alanı şehir ve fazladan metinlerden temizlendi. ${skipped} mükerrer kayıt engellendi.`);
+}
+function setMessage(text) {
+  const el = document.getElementById('importMessage');
+  if (!text) {
+    el.classList.add('hidden');
+    el.textContent = '';
+  } else {
+    el.classList.remove('hidden');
+    el.textContent = text;
+  }
+}
+function ensureClient(name) {
+  const n = String(name || '').trim();
+  if (!n) return '';
+  if (!state.clients.includes(n)) state.clients.push(n);
+  return n;
+}
+function ensureCompany(name) {
+  const n = String(name || '').trim();
+  if (!n) return '';
+  if (!state.companies.includes(n)) state.companies.push(n);
+  return n;
+}
+function normalizeFileType(name) {
+  const n = String(name || '').trim();
+  if (!n) return '';
+  return n.toLocaleLowerCase('tr').split(' ').map(part => part ? part.charAt(0).toLocaleUpperCase('tr') + part.slice(1) : '').join(' ');
+}
+function ensureFileType(name) {
+  const normalized = normalizeFileType(name);
+  if (!normalized) return '';
+  if (!Array.isArray(state.fileTypes)) state.fileTypes = [...DEFAULT_FILE_TYPES];
+  const exists = state.fileTypes.some(item => String(item).toLocaleLowerCase('tr') === normalized.toLocaleLowerCase('tr'));
+  if (!exists) {
+    state.fileTypes.push(normalized);
+    state.fileTypes.sort((a,b) => String(a).localeCompare(String(b), 'tr'));
+  }
+  return normalized;
+}
+function getClientFiles(clientName) {
+  return state.clientFiles
+    .filter(item => item.client === clientName)
+    .sort((a, b) => {
+      const courtCompare = getFileCourt(a).localeCompare(getFileCourt(b), 'tr');
+      if (courtCompare !== 0) return courtCompare;
+      return getFileNumber(a).localeCompare(getFileNumber(b), 'tr');
+    });
+}
+function getFileById(id) { return state.clientFiles.find(item => item.id === id) || null; }
+function getTaskById(id) { return state.tasks.find(item => item.id === id) || null; }
+function linkedFileLabel(task) {
+  if (!task || !task.fileId) return '-';
+  return task.clientName ? `${task.fileName} — ${task.clientName}` : (task.fileName || '-');
+}
+function closeTaskFilePicker() {
+  ui.taskPickerTaskId = '';
+  document.getElementById('taskFilePickerModal').classList.add('hidden');
+  document.getElementById('taskFileSearchInput').value = '';
+}
+function openTaskFilePicker(taskId) {
+  ui.taskPickerTaskId = taskId;
+  document.getElementById('taskFileSearchInput').value = '';
+  document.getElementById('taskFilePickerModal').classList.remove('hidden');
+  renderTaskFilePicker();
+}
+function renderTaskFilePicker() {
+  const list = document.getElementById('taskFilePickerList');
+  const empty = document.getElementById('taskFilePickerEmpty');
+  const search = document.getElementById('taskFileSearchInput').value.trim().toLocaleLowerCase('tr');
+  const files = [...state.clientFiles].sort((a, b) => {
+    const clientCompare = String(a.client || '').localeCompare(String(b.client || ''), 'tr');
+    if (clientCompare !== 0) return clientCompare;
+    return getFileDisplayName(a).localeCompare(getFileDisplayName(b), 'tr');
+  }).filter(file => {
+    if (!search) return true;
+    const hay = `${getFileDisplayName(file)} ${file.client || ''}`.toLocaleLowerCase('tr');
+    return hay.includes(search);
+  });
+  list.innerHTML = '';
+  if (!files.length) {
+    empty.classList.remove('hidden');
+    list.classList.add('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  list.classList.remove('hidden');
+  files.forEach(file => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'search-item-btn';
+    button.setAttribute('data-pick-file', file.id);
+    button.innerHTML = `<div class="search-item-title">${escapeHtml(getFileDisplayName(file))}</div><div class="muted">${escapeHtml(file.client || 'Müvekkil seçilmedi')}</div>`;
+    list.appendChild(button);
+  });
+}
+function getExpenseFormClient() {
+  return document.getElementById('expenseClientInput').value.trim() || document.getElementById('expenseClientSelect').value.trim();
+}
+function getIncomeFormClient() {
+  return document.getElementById('incomeClientInput').value.trim() || document.getElementById('incomeClientSelect').value.trim();
+}
+function getExpectedIncomeFormClient() {
+  return document.getElementById('expectedIncomeClientInput').value.trim() || document.getElementById('expectedIncomeClientSelect').value.trim();
+}
+function getCompanyExpenses(company) { return state.companyExpenses.filter(item => item.company === company); }
+function getCompanyIncoming(company) { return state.companyIncoming.filter(item => item.company === company); }
+function getCompanyFees(company) { return state.companyFees.filter(item => item.company === company); }
+function companyGrossExpense(company) { return sum(getCompanyExpenses(company), 'amount'); }
+function companyIncomingTotal(company) { return sum(getCompanyIncoming(company), 'amount'); }
+function companyNetExpense(company) { return companyGrossExpense(company) - companyIncomingTotal(company); }
+function companyFeeTotal(company) { return sum(getCompanyFees(company), 'amount'); }
+function companyCash(company) { return companyFeeTotal(company) - companyNetExpense(company); }
+function resetSelectedFileIfInvalid() {
+  if (ui.selectedFileId && !state.clientFiles.some(item => item.id === ui.selectedFileId)) ui.selectedFileId = '';
+}
+function resetSelectedClientIfInvalid() {
+  if (ui.selectedClient && !state.clients.includes(ui.selectedClient)) {
+    ui.selectedClient = '';
+    ui.selectedFileId = '';
+  }
+}
+function resetSelectedCompanyIfInvalid() {
+  if (ui.selectedCompany && !state.companies.includes(ui.selectedCompany)) ui.selectedCompany = '';
+}
+function render() {
+  resetSelectedClientIfInvalid();
+  resetSelectedFileIfInvalid();
+  resetSelectedCompanyIfInvalid();
+  if (ui.taskPickerTaskId && !state.tasks.some(item => item.id === ui.taskPickerTaskId)) closeTaskFilePicker();
+  saveState();
+
+  const clientIncomeTotal = sum(state.incomes, 'amount');
+  const clientExpenseTotal = sum(state.expenses, 'amount');
+  const companyFeeGrandTotal = sum(state.companyFees, 'amount');
+  const companyExpenseGrandTotal = sum(state.companyExpenses, 'amount');
+  const companyIncomingGrandTotal = sum(state.companyIncoming, 'amount');
+  const netCompanyExpense = companyExpenseGrandTotal - companyIncomingGrandTotal;
+  const totalIncome = clientIncomeTotal + companyFeeGrandTotal;
+  const totalExpense = clientExpenseTotal + netCompanyExpense;
+  const currentCash = Number(state.startingBalance || 0) + totalIncome - totalExpense;
+
+  document.getElementById('statIncome').textContent = fmtMoney(totalIncome);
+  document.getElementById('statExpense').textContent = fmtMoney(totalExpense);
+  document.getElementById('statCash').textContent = fmtMoney(currentCash);
+  document.getElementById('statClientFileCount').textContent = `${state.clients.length} / ${state.clientFiles.length} / ${state.companies.length}`;
+  document.getElementById('startingBalance').value = state.startingBalance;
+
+  renderClients();
+  renderClientDetail();
+  renderCompanies();
+  renderCompanyDetail();
+  renderAllFiles();
+  renderUpcomingTasks();
+  renderTasks();
+  renderPartyPersonal();
+  renderExpenses();
+  renderIncomes();
+  renderExpectedIncomes();
+  renderHistory();
+  updateClientSelects();
+  updateRangeSummary();
+}
+function renderClients() {
+  const empty = document.getElementById('clientEmpty');
+  const wrap = document.getElementById('clientTableWrap');
+  const body = document.getElementById('clientTableBody');
+  const search = document.getElementById('clientSearchInput').value.trim().toLocaleLowerCase('tr');
+  const clients = [...state.clients].sort((a,b) => a.localeCompare(b, 'tr')).filter(client => !search || client.toLocaleLowerCase('tr').includes(search));
+  body.innerHTML = '';
+  if (!state.clients.length) {
+    empty.classList.remove('hidden'); wrap.classList.add('hidden'); empty.textContent = 'Henüz müvekkil kaydı yok.'; return;
+  }
+  if (!clients.length) {
+    empty.classList.remove('hidden'); wrap.classList.add('hidden'); empty.textContent = 'Aramanıza uygun müvekkil bulunamadı.'; return;
+  }
+  empty.classList.add('hidden'); wrap.classList.remove('hidden');
+  clients.forEach(client => {
+    const fileCount = getClientFiles(client).length;
+    const tr = document.createElement('tr');
+    tr.className = 'clickable-row';
+    tr.setAttribute('data-open-client', encodeURIComponent(client));
+    tr.innerHTML = `<td><span class="client-link" data-open-client="${encodeURIComponent(client)}">${escapeHtml(client)}</span></td><td>${fileCount}</td><td><button class="tiny-btn" data-open-client="${encodeURIComponent(client)}">Aç</button></td><td><button class="tiny-btn red" data-del-client="${encodeURIComponent(client)}">Sil</button></td>`;
+    body.appendChild(tr);
+  });
+}
+function renderClientDetail() {
+  const detailEmpty = document.getElementById('clientDetailEmpty');
+  const detailWrap = document.getElementById('clientDetailWrap');
+  const title = document.getElementById('selectedClientTitle');
+  const subtitle = document.getElementById('selectedClientSubtitle');
+  const badge = document.getElementById('selectedClientBadge');
+  if (!ui.selectedClient) {
+    detailEmpty.classList.remove('hidden'); detailWrap.classList.add('hidden');
+    title.textContent = 'Müvekkil Seçilmedi';
+    subtitle.textContent = 'Soldaki listeden bir müvekkile tıklayın. Seçili müvekkil için dosya açabilir ve dosya detayına girebilirsiniz.';
+    badge.textContent = 'Dosya Sayısı: 0';
+    return;
+  }
+  const files = getClientFiles(ui.selectedClient);
+  detailEmpty.classList.add('hidden'); detailWrap.classList.remove('hidden');
+  title.textContent = ui.selectedClient;
+  subtitle.textContent = 'Seçili müvekkile ait dosyalar aşağıda listelenir.';
+  badge.textContent = `Dosya Sayısı: ${files.length}`;
+  renderCaseFiles();
+}
+function renderCaseFiles() {
+  const empty = document.getElementById('caseFileEmpty');
+  const wrap = document.getElementById('caseFileTableWrap');
+  const body = document.getElementById('caseFileTableBody');
+  const files = getClientFiles(ui.selectedClient);
+  body.innerHTML = '';
+  if (!files.length) {
+    empty.classList.remove('hidden'); wrap.classList.add('hidden');
+  } else {
+    empty.classList.add('hidden'); wrap.classList.remove('hidden');
+    files.forEach(file => {
+      const incomeTotal = sum(state.incomes.filter(item => item.fileId === file.id), 'amount');
+      const expenseTotal = sum(state.expenses.filter(item => item.fileId === file.id), 'amount');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${escapeHtml(getFileUnit(file) || '-')}</td><td>${escapeHtml(getFileCourt(file) || '-')}</td><td>${escapeHtml(getFileNumber(file) || '-')}</td><td>${escapeHtml(file.fileType || '-')}</td><td><b>${fmtMoney(incomeTotal - expenseTotal)}</b></td><td><button class="tiny-btn" data-open-file="${file.id}">Aç</button></td><td><button class="tiny-btn red" data-del-file="${file.id}">Sil</button></td>`;
+      body.appendChild(tr);
+    });
+  }
+  renderFileDetail();
+}
+
+function renderFileDetail() {
+  const wrap = document.getElementById('fileDetailWrap');
+  const empty = document.getElementById('fileDetailEmpty');
+  const file = getFileById(ui.selectedFileId);
+  if (!ui.selectedClient || !file || file.client !== ui.selectedClient) {
+    wrap.classList.add('hidden'); empty.classList.remove('hidden'); empty.textContent = 'Bir dosya seçtiğinizde dosya detayı burada açılır.'; return;
+  }
+  const fileIncomes = state.incomes.filter(item => item.fileId === file.id);
+  const fileExpenses = state.expenses.filter(item => item.fileId === file.id);
+  const incomeTotal = sum(fileIncomes, 'amount');
+  const expenseTotal = sum(fileExpenses, 'amount');
+  const netTotal = incomeTotal - expenseTotal;
+  wrap.classList.remove('hidden'); empty.classList.add('hidden');
+  document.getElementById('selectedFileTitle').textContent = getFileDisplayName(file);
+  document.getElementById('selectedFileSubtitle').textContent = `${file.client || 'Müvekkil seçilmedi'}${getFileUnit(file) ? ' • ' + getFileUnit(file) : ''} dosya detayı.`;
+  document.getElementById('selectedFileBadge').textContent = `Net: ${fmtMoney(netTotal)}`;
+  document.getElementById('fileIncomeTotal').textContent = fmtMoney(incomeTotal);
+  document.getElementById('fileExpenseTotal').textContent = fmtMoney(expenseTotal);
+  document.getElementById('fileNetTotal').textContent = fmtMoney(netTotal);
+  document.getElementById('fileNoteInput').value = file.note || '';
+  const fileTypeSelect = document.getElementById('fileTypeSelect');
+  fileTypeSelect.innerHTML = '<option value="">Dosya türü seçin</option>';
+  const availableFileTypes = [...new Set([...(state.fileTypes || []), ...(file.fileType ? [file.fileType] : [])])].sort((a,b) => String(a).localeCompare(String(b), 'tr'));
+  availableFileTypes.forEach(type => {
+    const option = document.createElement('option');
+    option.value = type;
+    option.textContent = type;
+    fileTypeSelect.appendChild(option);
+  });
+  fileTypeSelect.value = file.fileType || '';
+  const incomeEmpty = document.getElementById('fileIncomeEmpty');
+  const incomeWrap = document.getElementById('fileIncomeTableWrap');
+  const incomeBody = document.getElementById('fileIncomeTableBody');
+  incomeBody.innerHTML = '';
+  if (!fileIncomes.length) { incomeEmpty.classList.remove('hidden'); incomeWrap.classList.add('hidden'); }
+  else {
+    incomeEmpty.classList.add('hidden'); incomeWrap.classList.remove('hidden');
+    fileIncomes.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${fmtMoney(item.amount)}</td><td>${escapeHtml(item.date)}</td><td><button class="tiny-btn red" data-del-income="${item.id}">Sil</button></td>`;
+      incomeBody.appendChild(tr);
+    });
+  }
+  const expenseEmpty = document.getElementById('fileExpenseEmpty');
+  const expenseWrap = document.getElementById('fileExpenseTableWrap');
+  const expenseBody = document.getElementById('fileExpenseTableBody');
+  expenseBody.innerHTML = '';
+  if (!fileExpenses.length) { expenseEmpty.classList.remove('hidden'); expenseWrap.classList.add('hidden'); }
+  else {
+    expenseEmpty.classList.add('hidden'); expenseWrap.classList.remove('hidden');
+    fileExpenses.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${fmtMoney(item.amount)}</td><td>${escapeHtml(item.date)}</td><td><button class="tiny-btn red" data-del-expense="${item.id}">Sil</button></td>`;
+      expenseBody.appendChild(tr);
+    });
+  }
+
+  const fileExpectedRows = (state.expectedIncomes || []).filter(item => item.fileId === file.id);
+  const fileExpectedEmpty = document.getElementById('fileExpectedIncomeEmpty');
+  const fileExpectedWrap = document.getElementById('fileExpectedIncomeTableWrap');
+  const fileExpectedBody = document.getElementById('fileExpectedIncomeTableBody');
+  fileExpectedBody.innerHTML = '';
+  if (!fileExpectedRows.length) {
+    fileExpectedEmpty.classList.remove('hidden');
+    fileExpectedWrap.classList.add('hidden');
+  } else {
+    fileExpectedEmpty.classList.add('hidden');
+    fileExpectedWrap.classList.remove('hidden');
+    fileExpectedRows
+      .sort((a, b) => String(a.dueDate || '').localeCompare(String(b.dueDate || '')))
+      .forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${fmtMoney(item.amount)}</td><td>${escapeHtml(item.dueDate || '-')}</td><td><input type="checkbox" data-realize-expected-income="${item.id}"></td><td><button class="tiny-btn red" data-del-expected-income="${item.id}">Sil</button></td>`;
+        fileExpectedBody.appendChild(tr);
+      });
+  }
+
+  const fileTasks = [...state.tasks].filter(item => item.fileId === file.id).sort((a, b) => {
+    if (a.done !== b.done) return a.done ? 1 : -1;
+    const aDeadline = a.deadline || '9999-12-31';
+    const bDeadline = b.deadline || '9999-12-31';
+    if (aDeadline !== bDeadline) return aDeadline.localeCompare(bDeadline);
+    return String(a.date || '').localeCompare(String(b.date || ''));
+  });
+  const taskEmpty = document.getElementById('fileTaskEmpty');
+  const taskWrap = document.getElementById('fileTaskTableWrap');
+  const taskBody = document.getElementById('fileTaskTableBody');
+  taskBody.innerHTML = '';
+  if (!fileTasks.length) {
+    taskEmpty.classList.remove('hidden');
+    taskWrap.classList.add('hidden');
+  } else {
+    taskEmpty.classList.add('hidden');
+    taskWrap.classList.remove('hidden');
+    fileTasks.forEach(task => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td><span class="${task.done ? 'done' : ''}">${escapeHtml(task.title)}</span></td><td>${escapeHtml(task.deadline || '-')}</td><td><input type="checkbox" data-toggle-task="${task.id}" ${task.done ? 'checked' : ''}></td><td><button class="tiny-btn red" data-del-task="${task.id}">Sil</button></td>`;
+      taskBody.appendChild(tr);
+    });
+  }
+}
+function renderCompanies() {
+  const empty = document.getElementById('companyEmpty');
+  const wrap = document.getElementById('companyTableWrap');
+  const body = document.getElementById('companyTableBody');
+  const search = document.getElementById('companySearchInput').value.trim().toLocaleLowerCase('tr');
+  const companies = [...state.companies].sort((a,b) => a.localeCompare(b, 'tr')).filter(company => !search || company.toLocaleLowerCase('tr').includes(search));
+  body.innerHTML = '';
+  if (!state.companies.length) { empty.classList.remove('hidden'); wrap.classList.add('hidden'); empty.textContent = 'Henüz şirket kaydı yok.'; return; }
+  if (!companies.length) { empty.classList.remove('hidden'); wrap.classList.add('hidden'); empty.textContent = 'Aramanıza uygun şirket bulunamadı.'; return; }
+  empty.classList.add('hidden'); wrap.classList.remove('hidden');
+  companies.forEach(company => {
+    const tr = document.createElement('tr');
+    tr.className = 'clickable-row';
+    tr.setAttribute('data-open-company', encodeURIComponent(company));
+    tr.innerHTML = `<td><span class="client-link" data-open-company="${encodeURIComponent(company)}">${escapeHtml(company)}</span></td><td><b>${fmtMoney(companyCash(company))}</b></td><td><button class="tiny-btn" data-open-company="${encodeURIComponent(company)}">Aç</button></td><td><button class="tiny-btn red" data-del-company="${encodeURIComponent(company)}">Sil</button></td>`;
+    body.appendChild(tr);
+  });
+}
+function renderCompanyDetail() {
+  const detailEmpty = document.getElementById('companyDetailEmpty');
+  const detailWrap = document.getElementById('companyDetailWrap');
+  const title = document.getElementById('selectedCompanyTitle');
+  const subtitle = document.getElementById('selectedCompanySubtitle');
+  const badge = document.getElementById('selectedCompanyBadge');
+  const cashBtn = document.getElementById('selectedCompanyCashBtn');
+  if (!ui.selectedCompany) {
+    detailEmpty.classList.remove('hidden'); detailWrap.classList.add('hidden');
+    title.textContent = 'Şirket Seçilmedi';
+    subtitle.textContent = 'Soldaki listeden bir şirket seçin. Masraf, gelen ve vekalet ücreti kayıtlarını burada yönetin.';
+    badge.textContent = 'Kayıt Sayısı: 0';
+    cashBtn.textContent = 'Şirket Kasası: ₺0,00';
+    return;
+  }
+  detailEmpty.classList.add('hidden'); detailWrap.classList.remove('hidden');
+  title.textContent = ui.selectedCompany;
+  subtitle.textContent = 'Seçili şirkete ait masraf, gelen ve vekalet ücreti kayıtları aşağıda listelenir.';
+  const expenseRows = getCompanyExpenses(ui.selectedCompany);
+  const incomingRows = getCompanyIncoming(ui.selectedCompany);
+  const feeRows = getCompanyFees(ui.selectedCompany);
+  const grossExpense = companyGrossExpense(ui.selectedCompany);
+  const incomingTotal = companyIncomingTotal(ui.selectedCompany);
+  const netExpense = grossExpense - incomingTotal;
+  const feeTotal = companyFeeTotal(ui.selectedCompany);
+  const cashTotal = companyCash(ui.selectedCompany);
+  badge.textContent = `Kayıt Sayısı: ${expenseRows.length + incomingRows.length + feeRows.length}`;
+  cashBtn.textContent = `Şirket Kasası: ${fmtMoney(cashTotal)}`;
+  document.getElementById('companyExpenseTotal').textContent = fmtMoney(grossExpense);
+  document.getElementById('companyIncomingTotal').textContent = fmtMoney(incomingTotal);
+  document.getElementById('companyNetExpenseTotal').textContent = fmtMoney(netExpense);
+  document.getElementById('companyFeeTotal').textContent = fmtMoney(feeTotal);
+  document.getElementById('companyCashTotal').textContent = fmtMoney(cashTotal);
+  document.getElementById('companyRecordCount').textContent = String(expenseRows.length + incomingRows.length + feeRows.length);
+  ['expenses','incoming','fees'].forEach(tab => {
+    document.getElementById('companyTab' + capitalize(tab) + 'Btn').classList.toggle('active', ui.companyTab === tab);
+    document.getElementById('companySub' + capitalize(tab)).classList.toggle('hidden', ui.companyTab !== tab);
+  });
+  renderCompanyTables();
+}
+function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+function renderCompanyTables() {
+  const expenseRows = getCompanyExpenses(ui.selectedCompany);
+  const incomingRows = getCompanyIncoming(ui.selectedCompany);
+  const feeRows = getCompanyFees(ui.selectedCompany);
+  fillCompanyTable('Expense', expenseRows, 'Masraf', 'company-expense');
+  fillCompanyTable('Incoming', incomingRows, 'Gelen', 'company-incoming');
+  fillCompanyTable('Fee', feeRows, 'Vekalet Ücreti', 'company-fee');
+}
+function fillCompanyTable(kind, rows, amountLabel, actionPrefix) {
+  const empty = document.getElementById('company' + kind + 'Empty');
+  const wrap = document.getElementById('company' + kind + 'TableWrap');
+  const body = document.getElementById('company' + kind + 'TableBody');
+  body.innerHTML = '';
+  if (!rows.length) { empty.classList.remove('hidden'); wrap.classList.add('hidden'); return; }
+  empty.classList.add('hidden'); wrap.classList.remove('hidden');
+  rows.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${escapeHtml(item.description || '-')}</td><td>${fmtMoney(item.amount)}</td><td>${escapeHtml(item.date)}</td><td><button class="tiny-btn red" data-del-${actionPrefix}="${item.id}">Sil</button></td>`;
+    body.appendChild(tr);
+  });
+}
+function renderFileCategoryButtons() {
+  const wrap = document.getElementById('fileCategoryButtons');
+  if (!wrap) return;
+  const buttons = [''].concat(FILE_CATEGORIES);
+  wrap.innerHTML = buttons.map(category => {
+    const label = category || 'Tümü';
+    const active = ui.fileCategory === category ? ' active' : '';
+    return `<button type="button" class="files-filter-btn${active}" data-file-category="${escapeHtml(category)}">${escapeHtml(label)}</button>`;
+  }).join('');
+}
+
+let showingClosedFiles = false;
+let filesTabSelectedFileId = null;
+
+function renderFilesTabDetail(fileId) {
+  filesTabSelectedFileId = fileId;
+  const file = state.clientFiles.find(f => f.id === fileId);
+  const wrap = document.getElementById('filesTabFileDetail');
+  if (!file) { wrap.classList.add('hidden'); return; }
+  wrap.classList.remove('hidden');
+  wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  document.getElementById('filesTabFileTitle').textContent = `${getFileCourt(file) || '?'} — ${getFileNumber(file) || '?'}${file.client ? ' · ' + file.client : ''}`;
+  const incs = state.incomes.filter(i => i.fileId === fileId);
+  const exps = state.expenses.filter(i => i.fileId === fileId);
+  const incTotal = sum(incs, 'amount');
+  const expTotal = sum(exps, 'amount');
+  document.getElementById('ftFileIncomeTotal').textContent = fmtMoney(incTotal);
+  document.getElementById('ftFileExpenseTotal').textContent = fmtMoney(expTotal);
+  document.getElementById('ftFileNetTotal').textContent = fmtMoney(incTotal - expTotal);
+  // Income list
+  const iEmpty = document.getElementById('ftFileIncomeEmpty');
+  const iWrap = document.getElementById('ftFileIncomeWrap');
+  const iBody = document.getElementById('ftFileIncomeBody');
+  iBody.innerHTML = '';
+  if (!incs.length) { iEmpty.classList.remove('hidden'); iWrap.classList.add('hidden'); }
+  else {
+    iEmpty.classList.add('hidden'); iWrap.classList.remove('hidden');
+    incs.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${fmtMoney(item.amount)}</td><td>${escapeHtml(item.date||'-')}</td><td><button class="tiny-btn red" data-del-income="${item.id}">Sil</button></td>`;
+      iBody.appendChild(tr);
+    });
+  }
+  // Expense list
+  const eEmpty = document.getElementById('ftFileExpenseEmpty');
+  const eWrap = document.getElementById('ftFileExpenseWrap');
+  const eBody = document.getElementById('ftFileExpenseBody');
+  eBody.innerHTML = '';
+  if (!exps.length) { eEmpty.classList.remove('hidden'); eWrap.classList.add('hidden'); }
+  else {
+    eEmpty.classList.add('hidden'); eWrap.classList.remove('hidden');
+    exps.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${fmtMoney(item.amount)}</td><td>${escapeHtml(item.date||'-')}</td><td><button class="tiny-btn red" data-del-expense="${item.id}">Sil</button></td>`;
+      eBody.appendChild(tr);
+    });
+  }
+}
+
+function renderAllFiles() {
+  const empty = document.getElementById('allFilesEmpty');
+  const wrap = document.getElementById('allFilesTableWrap');
+  const body = document.getElementById('allFilesTableBody');
+  const closedSection = document.getElementById('closedFilesSection');
+  const closedEmpty = document.getElementById('closedFilesEmpty');
+  const closedWrap = document.getElementById('closedFilesTableWrap');
+  const closedBody = document.getElementById('closedFilesTableBody');
+  const searchValue = (document.getElementById('allFilesSearchInput')?.value || '').trim().toLocaleLowerCase('tr');
+  renderFileCategoryButtons();
+
+  const closedCount = state.clientFiles.filter(f => f.closed).length;
+  const badge = document.getElementById('closedFilesCount');
+  if (badge) badge.textContent = String(closedCount);
+
+  const sortFiles = (arr) => [...arr].sort((a, b) => {
+    const cc = String(a.client || '').localeCompare(String(b.client || ''), 'tr');
+    if (cc !== 0) return cc;
+    const courtC = getFileCourt(a).localeCompare(getFileCourt(b), 'tr');
+    if (courtC !== 0) return courtC;
+    return getFileNumber(a).localeCompare(getFileNumber(b), 'tr');
+  });
+
+  const filterFiles = (arr) => arr.filter(file => {
+    const court = String(getFileCourt(file) || '');
+    if (ui.fileCategory && !court.toLocaleLowerCase('tr').includes(ui.fileCategory.toLocaleLowerCase('tr'))) return false;
+    if (!searchValue) return true;
+    const haystack = `${file.client || ''} ${getFileUnit(file) || ''} ${court} ${getFileNumber(file) || ''}`.toLocaleLowerCase('tr');
+    return haystack.includes(searchValue);
+  });
+
+  if (!showingClosedFiles) {
+    closedSection.classList.add('hidden');
+    document.getElementById('filesMainTitle').textContent = 'Açık Dosyalar';
+    document.getElementById('showClosedFilesBtn').style.display = '';
+    document.getElementById('showOpenFilesBtn').style.display = 'none';
+
+    const openFiles = filterFiles(sortFiles(state.clientFiles.filter(f => !f.closed)));
+    body.innerHTML = '';
+    if (!openFiles.length) {
+      empty.classList.remove('hidden'); wrap.classList.add('hidden');
+      empty.textContent = state.clientFiles.filter(f=>!f.closed).length ? 'Filtreye uygun dosya bulunamadı.' : 'Henüz açık dosya kaydı yok.';
+      return;
+    }
+    empty.classList.add('hidden'); wrap.classList.remove('hidden');
+    openFiles.forEach(file => {
+      const incomeTotal = sum(state.incomes.filter(item => item.fileId === file.id), 'amount');
+      const expenseTotal = sum(state.expenses.filter(item => item.fileId === file.id), 'amount');
+      const tr = document.createElement('tr');
+      tr.className = 'files-clickable-row';
+      tr.setAttribute('data-open-files-tab-detail', file.id);
+      tr.innerHTML = `
+        <td><select class="inline-select" data-file-client-select="${file.id}" onclick="event.stopPropagation()">${buildSelectOptionsHtml(file.client || '')}</select></td>
+        <td style="text-align:center;" onclick="event.stopPropagation()"><input type="checkbox" title="Dosyayı kapat" data-close-file="${file.id}" style="width:18px;height:18px;cursor:pointer;accent-color:#dc2626;"></td>
+        <td>${escapeHtml(getFileCourt(file) || '-')}</td>
+        <td>${escapeHtml(getFileNumber(file) || '-')}</td>
+        <td>${fmtMoney(incomeTotal)}</td>
+        <td>${fmtMoney(expenseTotal)}</td>
+        <td><b>${fmtMoney(incomeTotal - expenseTotal)}</b></td>`;
+      body.appendChild(tr);
+    });
+  } else {
+    empty.classList.add('hidden'); wrap.classList.add('hidden');
+    closedSection.classList.remove('hidden');
+    document.getElementById('filesMainTitle').textContent = 'Kapalı Dosyalar';
+    document.getElementById('showClosedFilesBtn').style.display = 'none';
+    document.getElementById('showOpenFilesBtn').style.display = '';
+
+    const closedFiles = filterFiles(sortFiles(state.clientFiles.filter(f => f.closed)));
+    closedBody.innerHTML = '';
+    if (!closedFiles.length) {
+      closedEmpty.classList.remove('hidden'); closedWrap.classList.add('hidden');
+      return;
+    }
+    closedEmpty.classList.add('hidden'); closedWrap.classList.remove('hidden');
+    closedFiles.forEach(file => {
+      const incomeTotal = sum(state.incomes.filter(item => item.fileId === file.id), 'amount');
+      const expenseTotal = sum(state.expenses.filter(item => item.fileId === file.id), 'amount');
+      const tr = document.createElement('tr');
+      tr.className = 'files-clickable-row';
+      tr.setAttribute('data-open-files-tab-detail', file.id);
+      tr.innerHTML = `
+        <td>${escapeHtml(file.client || '-')}</td>
+        <td style="text-align:center;" onclick="event.stopPropagation()"><input type="checkbox" checked title="Dosyayı yeniden aç" data-reopen-file="${file.id}" style="width:18px;height:18px;cursor:pointer;accent-color:#059669;"></td>
+        <td>${escapeHtml(getFileCourt(file) || '-')}</td>
+        <td>${escapeHtml(getFileNumber(file) || '-')}</td>
+        <td>${fmtMoney(incomeTotal)}</td>
+        <td>${fmtMoney(expenseTotal)}</td>
+        <td><b>${fmtMoney(incomeTotal - expenseTotal)}</b></td>`;
+      closedBody.appendChild(tr);
+    });
+  }
+}
+
+function renderUpcomingTasks() {
+  const soonEmpty = document.getElementById('upcomingSoonEmpty');
+  const soonWrap = document.getElementById('upcomingSoonWrap');
+  const soonBody = document.getElementById('upcomingSoonBody');
+
+  const soonTasks = [...state.tasks]
+    .filter(task => task.deadline && deadlineDiffDays(task.deadline) !== null && deadlineDiffDays(task.deadline) <= 7)
+    .sort((a, b) => {
+      const aDiff = deadlineDiffDays(a.deadline);
+      const bDiff = deadlineDiffDays(b.deadline);
+      if (a.done !== b.done) return a.done ? 1 : -1;
+      if (aDiff !== bDiff) return aDiff - bDiff;
+      return String(a.date || '').localeCompare(String(b.date || ''));
+    });
+
+  soonBody.innerHTML = '';
+  if (!soonTasks.length) {
+    soonEmpty.classList.remove('hidden');
+    soonWrap.classList.add('hidden');
+  } else {
+    soonEmpty.classList.add('hidden');
+    soonWrap.classList.remove('hidden');
+    soonTasks.forEach(task => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td><span class="${task.done ? 'done' : ''}">${escapeHtml(task.title)}</span></td><td>${escapeHtml(task.date || '-')}</td><td>${escapeHtml(task.deadline || '-')}</td><td>${escapeHtml(deadlineStatusText(task.deadline))}</td><td><input type="checkbox" data-toggle-task="${task.id}" ${task.done ? 'checked' : ''}></td>`;
+      soonBody.appendChild(tr);
+    });
+  }
+}
+
+function renderTasks() {
+  const empty = document.getElementById('taskEmpty');
+  const wrap = document.getElementById('taskTableWrap');
+  const body = document.getElementById('taskTableBody');
+  const tasks = [...state.tasks].sort((a,b) => {
+    const aDeadline = a.deadline || '9999-12-31';
+    const bDeadline = b.deadline || '9999-12-31';
+    if (a.done !== b.done) return a.done ? 1 : -1;
+    if (aDeadline !== bDeadline) return aDeadline.localeCompare(bDeadline);
+    return String(a.date || '').localeCompare(String(b.date || ''));
+  });
+  body.innerHTML = '';
+  if (!tasks.length) { empty.classList.remove('hidden'); wrap.classList.add('hidden'); return; }
+  empty.classList.add('hidden'); wrap.classList.remove('hidden');
+  tasks.forEach(task => {
+    const tr = document.createElement('tr');
+    const fileLabel = task.fileId ? linkedFileLabel(task) : (task.fileNote || '-');
+    const fileCellHtml = `<div style="display:flex;align-items:center;gap:4px;min-width:90px;">
+      <span style="font-size:12px;color:#1e3a8a;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(fileLabel)}">${escapeHtml(fileLabel)}</span>
+      <button class="tiny-btn secondary" data-task-file-pick="${task.id}" style="padding:2px 7px;font-size:11px;flex-shrink:0;" title="Dosya Seç">📎</button>
+    </div>`;
+    tr.innerHTML = `
+      <td><span class="${task.done ? 'done' : ''}" style="font-size:13px;">${escapeHtml(task.title)}</span></td>
+      <td style="font-size:12px;color:var(--muted);white-space:nowrap;">${escapeHtml(task.date || '-')}</td>
+      <td style="font-size:12px;color:var(--muted);white-space:nowrap;">${escapeHtml(task.deadline || '-')}</td>
+      <td>${fileCellHtml}</td>
+      <td><input type="checkbox" data-toggle-task="${task.id}" ${task.done ? 'checked' : ''}></td>
+      <td><button class="tiny-btn red" data-del-task="${task.id}" style="padding:4px 8px;font-size:11px;">Sil</button></td>`;
+    body.appendChild(tr);
+  });
+}
+function renderPartyPersonal() {
+  const sections = [
+    { key: 'partyItems', emptyId: 'partyEmpty', wrapId: 'partyTableWrap', bodyId: 'partyTableBody', attr: 'data-del-party-item' },
+    { key: 'personalItems', emptyId: 'personalEmpty', wrapId: 'personalTableWrap', bodyId: 'personalTableBody', attr: 'data-del-personal-item' },
+  ];
+  sections.forEach(section => {
+    const empty = document.getElementById(section.emptyId);
+    const wrap = document.getElementById(section.wrapId);
+    const body = document.getElementById(section.bodyId);
+    const rows = Array.isArray(state[section.key]) ? state[section.key] : [];
+    body.innerHTML = '';
+    if (!rows.length) {
+      empty.classList.remove('hidden');
+      wrap.classList.add('hidden');
+      return;
+    }
+    empty.classList.add('hidden');
+    wrap.classList.remove('hidden');
+    rows.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${escapeHtml(item.text)}</td><td><button class="tiny-btn red" ${section.attr}="${item.id}">Sil</button></td>`;
+      body.appendChild(tr);
+    });
+  });
+}
+
+function renderExpenses() {
+  const empty = document.getElementById('expenseEmpty');
+  const wrap = document.getElementById('expenseTableWrap');
+  const body = document.getElementById('expenseTableBody');
+  body.innerHTML = '';
+  if (!state.expenses.length) { empty.classList.remove('hidden'); wrap.classList.add('hidden'); return; }
+  empty.classList.add('hidden'); wrap.classList.remove('hidden');
+  state.expenses.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${escapeHtml(item.client)}</td><td>${escapeHtml(item.fileName || '-')}</td><td>${fmtMoney(item.amount)}</td><td>${escapeHtml(item.date)}</td><td><button class="tiny-btn red" data-del-expense="${item.id}">Sil</button></td>`;
+    body.appendChild(tr);
+  });
+}
+function renderIncomes() {
+  const empty = document.getElementById('incomeEmpty');
+  const wrap = document.getElementById('incomeTableWrap');
+  const body = document.getElementById('incomeTableBody');
+  body.innerHTML = '';
+  if (!state.incomes.length) { empty.classList.remove('hidden'); wrap.classList.add('hidden'); return; }
+  empty.classList.add('hidden'); wrap.classList.remove('hidden');
+  state.incomes.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${escapeHtml(item.client)}</td><td>${escapeHtml(item.fileName || '-')}</td><td>${fmtMoney(item.amount)}</td><td><input type="date" value="${escapeHtml(item.date)}" data-update-income-date="${item.id}"></td><td><button class="tiny-btn red" data-del-income="${item.id}">Sil</button></td>`;
+    body.appendChild(tr);
+  });
+}
+function renderExpectedIncomes() {
+  const empty = document.getElementById('expectedIncomeEmpty');
+  const wrap = document.getElementById('expectedIncomeTableWrap');
+  const body = document.getElementById('expectedIncomeTableBody');
+  body.innerHTML = '';
+  const rows = [...(state.expectedIncomes || [])].sort((a,b) => String(a.dueDate || '').localeCompare(String(b.dueDate || '')));
+  if (!rows.length) { empty.classList.remove('hidden'); wrap.classList.add('hidden'); return; }
+  empty.classList.add('hidden'); wrap.classList.remove('hidden');
+  rows.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${escapeHtml(item.client)}</td><td>${escapeHtml(item.fileName || '-')}</td><td>${fmtMoney(item.amount)}</td><td>${escapeHtml(item.dueDate || '-')}</td><td><input type="checkbox" data-realize-expected-income="${item.id}"></td><td><button class="tiny-btn red" data-del-expected-income="${item.id}">Sil</button></td>`;
+    body.appendChild(tr);
+  });
+}
+function renderHistory() {
+  const empty = document.getElementById('historyEmpty');
+  const wrap = document.getElementById('historyTableWrap');
+  const body = document.getElementById('historyTableBody');
+  const map = {};
+  state.incomes.forEach(item => {
+    const m = item.date.slice(0, 7); map[m] ||= { month: m, income: 0, expense: 0 }; map[m].income += Number(item.amount || 0);
+  });
+  state.expenses.forEach(item => {
+    const m = item.date.slice(0, 7); map[m] ||= { month: m, income: 0, expense: 0 }; map[m].expense += Number(item.amount || 0);
+  });
+  state.companyFees.forEach(item => {
+    const m = item.date.slice(0,7); map[m] ||= { month: m, income: 0, expense: 0 }; map[m].income += Number(item.amount || 0);
+  });
+  state.companyExpenses.forEach(item => {
+    const m = item.date.slice(0,7); map[m] ||= { month: m, income: 0, expense: 0 }; map[m].expense += Number(item.amount || 0);
+  });
+  state.companyIncoming.forEach(item => {
+    const m = item.date.slice(0,7); map[m] ||= { month: m, income: 0, expense: 0 }; map[m].expense -= Number(item.amount || 0);
+  });
+  const rows = Object.values(map).map(v => ({ ...v, net: v.income - v.expense })).sort((a,b) => b.month.localeCompare(a.month));
+  body.innerHTML = '';
+  if (!rows.length) { empty.classList.remove('hidden'); wrap.classList.add('hidden'); return; }
+  empty.classList.add('hidden'); wrap.classList.remove('hidden');
+  rows.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${escapeHtml(monthLabel(item.month))}</td><td>${fmtMoney(item.income)}</td><td>${fmtMoney(item.expense)}</td><td><b>${fmtMoney(item.net)}</b></td>`;
+    body.appendChild(tr);
+  });
+}
+// ---- AJANDA ----
+const TR_DAYS_SHORT = ['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
+const TR_MONTHS = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+let agendaOffset = 0; // offset in 30-day pages
+
+function agendaKey(dateStr, rowIdx) {
+  return dateStr + '__r' + rowIdx;
+}
+
+function getAgendaStartDate() {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const start = new Date(today);
+  start.setDate(start.getDate() + agendaOffset * 30);
+  return start;
+}
+
+function renderAgenda() {
+  const grid = document.getElementById('agendaGrid');
+  if (!grid) return;
+  const todayStr2 = todayStr();
+  const start = getAgendaStartDate();
+  const end = new Date(start);
+  end.setDate(end.getDate() + 29);
+
+  // Update label
+  const label = document.getElementById('agendaRangeLabel');
+  if (label) {
+    const s = `${start.getDate()} ${TR_MONTHS[start.getMonth()]} ${start.getFullYear()}`;
+    const e = `${end.getDate()} ${TR_MONTHS[end.getMonth()]} ${end.getFullYear()}`;
+    label.textContent = s + ' – ' + e;
+  }
+
+  // Build 30 days in chunks of 6 per row (Sat+Sun merged as one cell)
+  // Actual layout: just 6 columns, 5 rows = 30 days (each day independent, Sat/Sun styled)
+  grid.innerHTML = '';
+
+  if (!state.agendaEntries) state.agendaEntries = {};
+
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(start);
+    d.setDate(d.getDate() + i);
+    const y = d.getFullYear();
+    const mo = String(d.getMonth() + 1).padStart(2, '0');
+    const dy = String(d.getDate()).padStart(2, '0');
+    const dStr = `${y}-${mo}-${dy}`;
+    const dayOfWeek = d.getDay(); // 0=Sun,6=Sat
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+    const isToday = dStr === todayStr2;
+
+    const card = document.createElement('div');
+    card.className = 'agenda-day-card' + (isToday ? ' today' : '') + (isWeekend ? ' weekend' : '');
+
+    const dayName = TR_DAYS_SHORT[dayOfWeek];
+    const badge = isToday ? '<span class="today-label">Bugün</span>' : (isWeekend ? '<span class="weekend-label">' + dayName + '</span>' : '');
+    const headerHtml = `<div class="agenda-day-header"><span class="day-num">${d.getDate()}</span><div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;"><span style="font-size:10px;color:var(--muted);">${isToday ? '' : dayName}</span>${badge}</div></div>`;
+
+    card.innerHTML = headerHtml;
+
+    for (let r = 0; r < 7; r++) {
+      const key = agendaKey(dStr, r);
+      const entry = state.agendaEntries[key] || { text: '', done: false };
+
+      const row = document.createElement('div');
+      row.className = 'agenda-row';
+
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.setAttribute('data-agenda-check', key);
+      cb.checked = !!entry.done;
+
+      const ti = document.createElement('input');
+      ti.type = 'text';
+      ti.setAttribute('data-agenda-text', key);
+      ti.value = entry.text || '';
+      ti.placeholder = '…';
+      ti.autocomplete = 'off';
+      ti.autocorrect = 'off';
+      ti.spellcheck = false;
+      if (entry.done) ti.classList.add('done-text');
+
+      row.appendChild(cb);
+      row.appendChild(ti);
+      card.appendChild(row);
+    }
+
+    grid.appendChild(card);
+  }
+}
+
+
+function updateClientSelects() {
+  const clients = [...state.clients].sort((a,b) => a.localeCompare(b, 'tr'));
+  ['expenseClientSelect', 'incomeClientSelect', 'expectedIncomeClientSelect'].forEach(id => {
+    const select = document.getElementById(id);
+    const current = select.value;
+    select.innerHTML = '<option value="">Müvekkil seçin</option>';
+    clients.forEach(client => {
+      const option = document.createElement('option'); option.value = client; option.textContent = client; select.appendChild(option);
+    });
+    if (clients.includes(current)) select.value = current;
+  });
+  updateMainFileSelects();
+}
+function updateMainFileSelects() {
+  updateFileSelect('expenseFileSelect', getExpenseFormClient());
+  updateFileSelect('incomeFileSelect', getIncomeFormClient());
+  updateFileSelect('expectedIncomeFileSelect', getExpectedIncomeFormClient());
+}
+function updateFileSelect(selectId, clientName) {
+  const select = document.getElementById(selectId);
+  const current = select.value;
+  select.innerHTML = '<option value="">Dosya seçin (opsiyonel)</option>';
+  if (!clientName) return;
+  getClientFiles(clientName).forEach(file => {
+    const option = document.createElement('option'); option.value = file.id; option.textContent = getFileDisplayName(file); select.appendChild(option);
+  });
+  if ([...select.options].some(opt => opt.value === current)) select.value = current;
+}
+
+function updateRangeSummary() {
+  const start = document.getElementById('rangeStart').value;
+  const end = document.getElementById('rangeEnd').value;
+  const incomes = state.incomes.filter(item => (!start || item.date >= start) && (!end || item.date <= end));
+  const expenses = state.expenses.filter(item => (!start || item.date >= start) && (!end || item.date <= end));
+  const companyFees = state.companyFees.filter(item => (!start || item.date >= start) && (!end || item.date <= end));
+  const companyExpenses = state.companyExpenses.filter(item => (!start || item.date >= start) && (!end || item.date <= end));
+  const companyIncoming = state.companyIncoming.filter(item => (!start || item.date >= start) && (!end || item.date <= end));
+  const incomeTotal = sum(incomes, 'amount') + sum(companyFees, 'amount');
+  const expenseTotal = sum(expenses, 'amount') + sum(companyExpenses, 'amount') - sum(companyIncoming, 'amount');
+  document.getElementById('rangeIncome').textContent = fmtMoney(incomeTotal);
+  document.getElementById('rangeExpense').textContent = fmtMoney(expenseTotal);
+  document.getElementById('rangeNet').textContent = fmtMoney(incomeTotal - expenseTotal);
+}
+function buildBackupPayload() {
+  return { app: 'ofis-takip-standalone', version: 7, exportedAt: new Date().toISOString(), data: {
+    clients: state.clients || [], clientFiles: state.clientFiles || [], fileTypes: state.fileTypes || [], tasks: state.tasks || [], partyItems: state.partyItems || [], personalItems: state.personalItems || [], expenses: state.expenses || [], incomes: state.incomes || [], expectedIncomes: state.expectedIncomes || [],
+    companies: state.companies || [], companyExpenses: state.companyExpenses || [], companyIncoming: state.companyIncoming || [], companyFees: state.companyFees || [],
+    startingBalance: Number(state.startingBalance || 0),
+  }};
+}
+function downloadBackup() {
+  const payload = buildBackupPayload();
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'ofis-takip-yedek-' + todayStr() + '.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  setMessage('Yedek dosyası indirildi.');
+}
+function isValidBackupPayload(payload) {
+  if (!payload || typeof payload !== 'object') return false;
+  const data = payload.data && typeof payload.data === 'object' ? payload.data : payload;
+  return Array.isArray(data.clients) && Array.isArray(data.clientFiles || []) && Array.isArray(data.tasks) && Array.isArray(data.expenses) && Array.isArray(data.incomes) && Array.isArray(data.expectedIncomes || [])
+    && Array.isArray(data.companies || []) && Array.isArray(data.companyExpenses || []) && Array.isArray(data.companyIncoming || []) && Array.isArray(data.companyFees || []);
+}
+function applyBackupPayload(payload) {
+  const data = payload.data && typeof payload.data === 'object' ? payload.data : payload;
+  state.clients = (Array.isArray(data.clients) ? data.clients : []).map(x => String(x).trim()).filter(Boolean);
+  state.clientFiles = Array.isArray(data.clientFiles) ? data.clientFiles.map(migrateClientFileRecord).filter(item => getFileCourt(item) || getFileNumber(item)) : [];
+  state.tasks = Array.isArray(data.tasks) ? data.tasks.map(item => ({ id: item.id || crypto.randomUUID(), title: String(item.title || '').trim(), date: String(item.date || ''), deadline: String(item.deadline || ''), done: Boolean(item.done), fileId: String(item.fileId || ''), fileName: String(item.fileName || '').trim(), clientName: String(item.clientName || '').trim() })).filter(item => item.title && item.date) : [];
+  state.partyItems = Array.isArray(data.partyItems) ? data.partyItems.map(item => ({ id: item.id || crypto.randomUUID(), text: String(item.text || '').trim() })).filter(item => item.text) : [];
+  state.personalItems = Array.isArray(data.personalItems) ? data.personalItems.map(item => ({ id: item.id || crypto.randomUUID(), text: String(item.text || '').trim() })).filter(item => item.text) : [];
+  state.expenses = Array.isArray(data.expenses) ? data.expenses.map(item => ({ id: item.id || crypto.randomUUID(), client: String(item.client || '').trim(), fileId: String(item.fileId || ''), fileName: String(item.fileName || '').trim(), amount: Number(item.amount || 0), date: String(item.date || '') })).filter(item => item.client && item.amount >= 0 && item.date) : [];
+  state.incomes = Array.isArray(data.incomes) ? data.incomes.map(item => ({ id: item.id || crypto.randomUUID(), client: String(item.client || '').trim(), fileId: String(item.fileId || ''), fileName: String(item.fileName || '').trim(), amount: Number(item.amount || 0), date: String(item.date || '') })).filter(item => item.client && item.amount >= 0 && item.date) : [];
+  state.expectedIncomes = Array.isArray(data.expectedIncomes) ? data.expectedIncomes.map(item => ({ id: item.id || crypto.randomUUID(), client: String(item.client || '').trim(), fileId: String(item.fileId || ''), fileName: String(item.fileName || '').trim(), amount: Number(item.amount || 0), dueDate: String(item.dueDate || '') })).filter(item => item.client && item.amount >= 0 && item.dueDate) : [];
+  state.companies = (Array.isArray(data.companies) ? data.companies : []).map(x => String(x).trim()).filter(Boolean);
+  state.companyExpenses = Array.isArray(data.companyExpenses) ? data.companyExpenses.map(item => ({ id: item.id || crypto.randomUUID(), company: String(item.company || '').trim(), description: String(item.description || '').trim(), amount: Number(item.amount || 0), date: String(item.date || '') })).filter(item => item.company && item.amount >= 0 && item.date) : [];
+  state.companyIncoming = Array.isArray(data.companyIncoming) ? data.companyIncoming.map(item => ({ id: item.id || crypto.randomUUID(), company: String(item.company || '').trim(), description: String(item.description || '').trim(), amount: Number(item.amount || 0), date: String(item.date || '') })).filter(item => item.company && item.amount >= 0 && item.date) : [];
+  state.companyFees = Array.isArray(data.companyFees) ? data.companyFees.map(item => ({ id: item.id || crypto.randomUUID(), company: String(item.company || '').trim(), description: String(item.description || '').trim(), amount: Number(item.amount || 0), date: String(item.date || '') })).filter(item => item.company && item.amount >= 0 && item.date) : [];
+  state.startingBalance = Number(data.startingBalance || 0);
+  ui.selectedClient = ''; ui.selectedFileId = ''; ui.selectedCompany = ''; ui.companyTab = 'expenses';
+}
+function resetAllData() {
+  const ok = window.confirm('Tüm veriler silinecek. Bu işlem geri alınamaz. Devam edilsin mi?');
+  if (!ok) return;
+  Object.assign(state, JSON.parse(JSON.stringify(defaultState)));
+  ui.selectedClient = ''; ui.selectedFileId = ''; ui.selectedCompany = ''; ui.companyTab = 'expenses';
+  localStorage.removeItem(STORAGE_KEY); LEGACY_KEYS.forEach(key => localStorage.removeItem(key));
+  render(); setMessage('Tüm veriler silindi.');
+}
+function clearAllFiles() {
+  const fileCount = Array.isArray(state.clientFiles) ? state.clientFiles.length : 0;
+  if (!fileCount) {
+    setMessage('Silinecek dosya kaydı yok.');
+    return;
+  }
+  const ok = window.confirm(`Yüklü tüm dosya kayıtları silinecek (${fileCount} adet). Bu işlem geri alınamaz. Devam edilsin mi?`);
+  if (!ok) return;
+  state.clientFiles = [];
+  state.expenses = (state.expenses || []).map(item => ({ ...item, fileId: '', fileName: '' }));
+  state.incomes = (state.incomes || []).map(item => ({ ...item, fileId: '', fileName: '' }));
+  state.expectedIncomes = (state.expectedIncomes || []).map(item => ({ ...item, fileId: '', fileName: '' }));
+  state.tasks = (state.tasks || []).map(item => ({ ...item, fileId: '', fileName: '', clientName: '' }));
+  ui.selectedFileId = '';
+  render();
+  setMessage('Tüm dosya kayıtları silindi. PDF içe aktarmada dosya türü sütunu dikkate alınmaz.');
+}
+['taskDate', 'expenseDate', 'incomeDate', 'expectedIncomeDueDate', 'fileIncomeDate', 'fileExpenseDate', 'fileExpectedIncomeDueDate', 'companyExpenseDate', 'companyIncomingDate', 'companyFeeDate', 'ftFileIncomeDate', 'ftFileExpenseDate'].forEach(id => { const el = document.getElementById(id); if (el) el.value = todayStr(); });
+document.getElementById('startingBalance').value = state.startingBalance;
+function activateTab(tabName) {
+  Array.from(document.querySelectorAll('.tab')).forEach(btn => {
+    if (btn.dataset.tab) btn.classList.toggle('active', btn.dataset.tab === tabName);
+  });
+  Array.from(document.querySelectorAll('.tab-panel')).forEach(panel => panel.classList.add('hidden'));
+  const panel = document.getElementById('panel-' + tabName);
+  if (panel) panel.classList.remove('hidden');
+  if (tabName === 'agenda') renderAgenda();
+}
+Array.from(document.querySelectorAll('.tab')).forEach(btn => {
+  if (btn.dataset.tab) btn.addEventListener('click', () => activateTab(btn.dataset.tab));
+});
+document.getElementById('agendaPrevBtn')?.addEventListener('click', () => { agendaOffset--; renderAgenda(); });
+document.getElementById('agendaNextBtn')?.addEventListener('click', () => { agendaOffset++; renderAgenda(); });
+document.getElementById('agendaTodayBtn')?.addEventListener('click', () => { agendaOffset = 0; renderAgenda(); });
+// forms
+document.getElementById('clientForm').addEventListener('submit', e => {
+  e.preventDefault(); const input = document.getElementById('clientNameInput'); const name = ensureClient(input.value); if (!name) return; ui.selectedClient = name; input.value = ''; render();
+});
+document.getElementById('companyForm').addEventListener('submit', e => {
+  e.preventDefault(); const input = document.getElementById('companyNameInput'); const name = ensureCompany(input.value); if (!name) return; ui.selectedCompany = name; ui.companyTab = 'expenses'; input.value = ''; render();
+});
+document.getElementById('clientSearchInput').addEventListener('input', renderClients);
+document.getElementById('companySearchInput').addEventListener('input', renderCompanies);
+document.getElementById('allFilesSearchInput').addEventListener('input', renderAllFiles);
+document.getElementById('allFilesSearchBtn').addEventListener('click', renderAllFiles);
+document.getElementById('allFilesSearchClearBtn').addEventListener('click', () => { document.getElementById('allFilesSearchInput').value = ''; renderAllFiles(); });
+document.getElementById('showClosedFilesBtn').addEventListener('click', () => { showingClosedFiles = true; renderAllFiles(); });
+document.getElementById('showOpenFilesBtn').addEventListener('click', () => { showingClosedFiles = false; renderAllFiles(); });
+document.querySelectorAll('[data-company-tab]').forEach(btn => btn.addEventListener('click', () => { ui.companyTab = btn.getAttribute('data-company-tab') || 'expenses'; renderCompanyDetail(); }));
+document.getElementById('caseFileForm').addEventListener('submit', e => {
+  e.preventDefault();
+  if (!ui.selectedClient) return;
+  const unitInput = document.getElementById('caseFileUnitInput');
+  const courtInput = document.getElementById('caseFileCourtInput');
+  const fileNoInput = document.getElementById('caseFileNoInput');
+  const unit = unitInput.value.trim();
+  const court = courtInput.value.trim();
+  const fileNo = fileNoInput.value.trim();
+  if (!court || !fileNo) {
+    setMessage('Yeni dosya eklemek için mahkeme ve dosya no alanlarını doldurun.');
+    return;
+  }
+  if (isDuplicateFileEntry(court, fileNo)) {
+    setMessage('Aynı mahkeme ve dosya numarasına sahip dosya zaten kayıtlı.');
+    return;
+  }
+  state.clientFiles.unshift(buildImportedFileRecord({ client: ui.selectedClient, unit, court, fileNo }));
+  unitInput.value = '';
+  courtInput.value = '';
+  fileNoInput.value = '';
+  render();
+});
+document.getElementById('saveFileNoteBtn').addEventListener('click', () => {
+  const file = getFileById(ui.selectedFileId); if (!file) { setMessage('Önce bir dosya seçin.'); return; } file.note = document.getElementById('fileNoteInput').value.trim(); saveState(); setMessage('Dosya notu kaydedildi.'); renderFileDetail();
+});
+document.getElementById('fileTypeSelect').addEventListener('change', e => {
+  const file = getFileById(ui.selectedFileId);
+  if (!file) return;
+  const selected = normalizeFileType(e.target.value || '');
+  file.fileType = selected;
+  if (selected) ensureFileType(selected);
+  saveState();
+  setMessage(selected ? 'Dosya türü kaydedildi.' : 'Dosya türü temizlendi.');
+  render();
+});
+document.getElementById('addCustomFileTypeBtn').addEventListener('click', () => {
+  const file = getFileById(ui.selectedFileId);
+  if (!file) { setMessage('Önce bir dosya seçin.'); return; }
+  const input = document.getElementById('customFileTypeInput');
+  const customType = ensureFileType(input.value);
+  if (!customType) return;
+  file.fileType = customType;
+  input.value = '';
+  saveState();
+  setMessage('Yeni dosya türü eklendi ve dosyaya atandı.');
+  render();
+});
+document.getElementById('taskForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const title = document.getElementById('taskTitle').value.trim();
+  const date = document.getElementById('taskDate').value;
+  const deadline = document.getElementById('taskDeadline').value;
+  if (!title || !date) return;
+  const fileId = document.getElementById('taskFormFileId').value || '';
+  const file = getFileById(fileId);
+  state.tasks.unshift({ id: crypto.randomUUID(), title, date, deadline, done: false,
+    fileId: file ? file.id : '',
+    fileName: file ? getFileDisplayName(file) : '',
+    clientName: file ? (file.client || '') : ''
+  });
+  document.getElementById('taskTitle').value = '';
+  document.getElementById('taskDate').value = todayStr();
+  document.getElementById('taskDeadline').value = '';
+  document.getElementById('taskFormFileId').value = '';
+  document.getElementById('taskFormFileSearch').value = '';
+  document.getElementById('taskFormFileSelected').classList.add('hidden');
+  document.getElementById('taskFormFileDropdown').classList.add('hidden');
+  render();
+});
+
+// Dosya arama dropdown — görev formu
+function buildFileSearchDropdown(query, dropdownEl, onSelect) {
+  const q = query.trim().toLocaleLowerCase('tr');
+  const files = state.clientFiles.filter(f => !f.closed).filter(f => {
+    if (!q) return true;
+    return `${getFileCourt(f)} ${getFileNumber(f)} ${f.client || ''}`.toLocaleLowerCase('tr').includes(q);
+  }).slice(0, 30);
+  dropdownEl.innerHTML = '';
+  if (!files.length) {
+    dropdownEl.innerHTML = '<div class="file-search-item" style="color:#94a3b8;">Dosya bulunamadı</div>';
+    dropdownEl.classList.remove('hidden');
+    return;
+  }
+  files.forEach(f => {
+    const item = document.createElement('div');
+    item.className = 'file-search-item';
+    item.innerHTML = `<div class="fs-court">${escapeHtml(getFileCourt(f) || '-')}</div><div class="fs-no">${escapeHtml(getFileNumber(f) || '-')}${f.client ? ' · <span class="fs-client">' + escapeHtml(f.client) + '</span>' : ''}</div>`;
+    item.addEventListener('mousedown', e => { e.preventDefault(); onSelect(f); });
+    dropdownEl.appendChild(item);
+  });
+  dropdownEl.classList.remove('hidden');
+}
+
+// Görev formu dosya arama
+document.getElementById('taskFormFileSearch').addEventListener('input', e => {
+  const dropdown = document.getElementById('taskFormFileDropdown');
+  buildFileSearchDropdown(e.target.value, dropdown, f => {
+    document.getElementById('taskFormFileId').value = f.id;
+    document.getElementById('taskFormFileSearch').value = '';
+    document.getElementById('taskFormFileDropdown').classList.add('hidden');
+    document.getElementById('taskFormFileSelectedLabel').textContent = `${getFileCourt(f)} — ${getFileNumber(f)}${f.client ? ' · ' + f.client : ''}`;
+    document.getElementById('taskFormFileSelected').classList.remove('hidden');
+  });
+});
+document.getElementById('taskFormFileSearch').addEventListener('focus', e => {
+  buildFileSearchDropdown(e.target.value, document.getElementById('taskFormFileDropdown'), f => {
+    document.getElementById('taskFormFileId').value = f.id;
+    document.getElementById('taskFormFileSearch').value = '';
+    document.getElementById('taskFormFileDropdown').classList.add('hidden');
+    document.getElementById('taskFormFileSelectedLabel').textContent = `${getFileCourt(f)} — ${getFileNumber(f)}${f.client ? ' · ' + f.client : ''}`;
+    document.getElementById('taskFormFileSelected').classList.remove('hidden');
+  });
+});
+document.getElementById('taskFormFileClear').addEventListener('click', () => {
+  document.getElementById('taskFormFileId').value = '';
+  document.getElementById('taskFormFileSelected').classList.add('hidden');
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('#taskFormFileWrap')) document.getElementById('taskFormFileDropdown').classList.add('hidden');
+});
+
+// Tablodaki 📎 butonuna basınca dosya arama popup
+let taskFilePickTarget = null;
+document.body.addEventListener('click', e => {
+  const pickBtn = e.target.closest('[data-task-file-pick]');
+  if (pickBtn) {
+    taskFilePickTarget = pickBtn.getAttribute('data-task-file-pick');
+    showInlineFileSearch(pickBtn);
+    return;
+  }
+  // Dosyalar sekmesi satır tıklama
+  const filesRow = e.target.closest('[data-open-files-tab-detail]');
+  if (filesRow && !e.target.closest('select') && !e.target.closest('input') && !e.target.closest('button')) {
+    renderFilesTabDetail(filesRow.getAttribute('data-open-files-tab-detail'));
+    return;
+  }
+}, true);
+
+// Dosya seçme modal (görev listesi için) — ekran ortasında büyük modal
+let inlineSearchPopup = null;
+function showInlineFileSearch(anchorEl) {
+  if (inlineSearchPopup) inlineSearchPopup.remove();
+
+  // Backdrop
+  const backdrop = document.createElement('div');
+  backdrop.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:900;display:flex;align-items:center;justify-content:center;padding:20px;';
+
+  // Modal kutu
+  const modal = document.createElement('div');
+  modal.style.cssText = 'background:white;border-radius:20px;box-shadow:0 24px 60px rgba(30,58,138,.22);width:min(520px,100%);max-height:80vh;display:flex;flex-direction:column;overflow:hidden;';
+  modal.innerHTML = `
+    <div style="padding:16px 20px;border-bottom:1px solid #eff6ff;display:flex;align-items:center;justify-content:space-between;">
+      <h3 style="margin:0;font-size:17px;color:#1e3a8a;">Dosya Seç</h3>
+      <button id="filePickModalClose" style="background:none;border:none;font-size:20px;cursor:pointer;color:#64748b;line-height:1;padding:2px 8px;">✕</button>
+    </div>
+    <div style="padding:14px 16px;border-bottom:1px solid #eff6ff;">
+      <input id="filePickSearch" type="text" placeholder="Mahkeme adı veya dosya numarası ara…"
+        style="width:100%;border:1.5px solid #bfdbfe;border-radius:12px;padding:11px 14px;font:inherit;font-size:14px;outline:none;box-sizing:border-box;">
+    </div>
+    <div id="filePickList" style="overflow-y:auto;flex:1;"></div>
+    <div style="padding:12px 16px;border-top:1px solid #eff6ff;display:flex;justify-content:space-between;align-items:center;">
+      <button id="filePickClearLink" style="background:none;border:1px solid #fca5a5;color:#dc2626;border-radius:10px;padding:7px 14px;font:inherit;font-size:13px;cursor:pointer;">Bağlantıyı Kaldır</button>
+      <button id="filePickCancel" style="background:#f1f5f9;border:none;color:#475569;border-radius:10px;padding:7px 16px;font:inherit;font-size:13px;cursor:pointer;">İptal</button>
+    </div>`;
+
+  backdrop.appendChild(modal);
+  document.body.appendChild(backdrop);
+  inlineSearchPopup = backdrop;
+
+  const searchInput = modal.querySelector('#filePickSearch');
+  const list = modal.querySelector('#filePickList');
+
+  function renderPickList(q) {
+    const files = state.clientFiles.filter(f => !f.closed);
+    const filtered = q.trim()
+      ? files.filter(f => `${getFileCourt(f)} ${getFileNumber(f)} ${f.client||''}`.toLocaleLowerCase('tr').includes(q.toLocaleLowerCase('tr')))
+      : files;
+    list.innerHTML = '';
+    if (!filtered.length) {
+      list.innerHTML = '<div style="padding:24px;text-align:center;color:#94a3b8;">Dosya bulunamadı</div>';
+      return;
+    }
+    filtered.slice(0, 50).forEach(f => {
+      const item = document.createElement('div');
+      item.style.cssText = 'padding:12px 16px;cursor:pointer;border-bottom:1px solid #f8fafc;display:flex;flex-direction:column;gap:3px;';
+      item.innerHTML = `<span style="font-weight:700;font-size:14px;color:#1e3a8a;">${escapeHtml(getFileCourt(f)||'-')}</span>
+        <span style="font-size:13px;color:#475569;">${escapeHtml(getFileNumber(f)||'-')}${f.client ? ' &nbsp;·&nbsp; <span style="color:#059669;">'+escapeHtml(f.client)+'</span>' : ''}</span>`;
+      item.addEventListener('mouseenter', () => item.style.background = '#eff6ff');
+      item.addEventListener('mouseleave', () => item.style.background = '');
+      item.addEventListener('click', () => {
+        const task = state.tasks.find(t => t.id === taskFilePickTarget);
+        if (task) { task.fileId = f.id; task.fileName = getFileDisplayName(f); task.clientName = f.client||''; saveState(); renderTasks(); }
+        backdrop.remove(); inlineSearchPopup = null;
+      });
+      list.appendChild(item);
+    });
+  }
+
+  renderPickList('');
+  searchInput.addEventListener('input', e => renderPickList(e.target.value));
+  modal.querySelector('#filePickModalClose').addEventListener('click', () => { backdrop.remove(); inlineSearchPopup = null; });
+  modal.querySelector('#filePickCancel').addEventListener('click', () => { backdrop.remove(); inlineSearchPopup = null; });
+  modal.querySelector('#filePickClearLink').addEventListener('click', () => {
+    const task = state.tasks.find(t => t.id === taskFilePickTarget);
+    if (task) { task.fileId=''; task.fileName=''; task.clientName=''; saveState(); renderTasks(); }
+    backdrop.remove(); inlineSearchPopup = null;
+  });
+  backdrop.addEventListener('click', e => { if (e.target === backdrop) { backdrop.remove(); inlineSearchPopup = null; } });
+  setTimeout(() => searchInput.focus(), 50);
+}
+
+// Dosyalar sekmesi — Dosya Ekle form
+document.getElementById('showAddFileFormBtn').addEventListener('click', () => {
+  const wrap = document.getElementById('addFileFormWrap');
+  wrap.classList.toggle('hidden');
+  if (!wrap.classList.contains('hidden')) {
+    // Müvekkil datalist güncelle
+    const dl = document.getElementById('sfClientList');
+    dl.innerHTML = state.clients.map(c => `<option value="${escapeHtml(c)}">`).join('');
+    document.getElementById('sfCourtInput').focus();
+  }
+});
+document.getElementById('cancelAddFileBtn').addEventListener('click', () => {
+  document.getElementById('addFileFormWrap').classList.add('hidden');
+});
+document.getElementById('standaloneFileForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const court = document.getElementById('sfCourtInput').value.trim();
+  const fileNo = document.getElementById('sfFileNoInput').value.trim();
+  const client = document.getElementById('sfClientInput').value.trim();
+  if (!court || !fileNo) { setMessage('Mahkeme ve dosya no zorunludur.'); return; }
+  if (isDuplicateFileEntry(court, fileNo)) { setMessage('Bu mahkeme ve dosya no zaten kayıtlı.'); return; }
+  if (client) ensureClient(client);
+  state.clientFiles.unshift(buildImportedFileRecord({ client, unit: '', court, fileNo }));
+  document.getElementById('sfCourtInput').value = '';
+  document.getElementById('sfFileNoInput').value = '';
+  document.getElementById('sfClientInput').value = '';
+  document.getElementById('addFileFormWrap').classList.add('hidden');
+  saveState(); render();
+  setMessage('Dosya eklendi.');
+});
+
+// Dosyalar sekmesi — detay kapat
+document.getElementById('filesTabFileDetailCloseBtn').addEventListener('click', () => {
+  document.getElementById('filesTabFileDetail').classList.add('hidden');
+  filesTabSelectedFileId = null;
+});
+
+// Dosyalar sekmesi — gelir/masraf ekle
+document.getElementById('ftFileIncomeForm').addEventListener('submit', e => {
+  e.preventDefault();
+  if (!filesTabSelectedFileId) return;
+  const file = getFileById(filesTabSelectedFileId);
+  const amount = Number(document.getElementById('ftFileIncomeAmount').value || 0);
+  const date = document.getElementById('ftFileIncomeDate').value;
+  if (!amount || !date) return;
+  state.incomes.unshift({ id: crypto.randomUUID(), client: file?.client || '', fileId: filesTabSelectedFileId, fileName: file ? getFileDisplayName(file) : '', amount, date });
+  document.getElementById('ftFileIncomeAmount').value = '';
+  saveState(); render(); renderFilesTabDetail(filesTabSelectedFileId);
+});
+document.getElementById('ftFileExpenseForm').addEventListener('submit', e => {
+  e.preventDefault();
+  if (!filesTabSelectedFileId) return;
+  const file = getFileById(filesTabSelectedFileId);
+  const amount = Number(document.getElementById('ftFileExpenseAmount').value || 0);
+  const date = document.getElementById('ftFileExpenseDate').value;
+  if (!amount || !date) return;
+  state.expenses.unshift({ id: crypto.randomUUID(), client: file?.client || '', fileId: filesTabSelectedFileId, fileName: file ? getFileDisplayName(file) : '', amount, date });
+  document.getElementById('ftFileExpenseAmount').value = '';
+  saveState(); render(); renderFilesTabDetail(filesTabSelectedFileId);
+});
+
+// Müvekkil paneli — Kayıtlı Dosyadan Bağla
+document.getElementById('linkExistingFileBtn').addEventListener('click', () => {
+  if (!ui.selectedClient) { setMessage('Önce müvekkil seçin.'); return; }
+  // Popup göster
+  if (inlineSearchPopup) inlineSearchPopup.remove();
+  const popup = document.createElement('div');
+  popup.style.cssText = 'position:fixed;z-index:500;background:white;border:1px solid #bfdbfe;border-radius:16px;box-shadow:0 8px 32px rgba(30,58,138,.18);padding:16px;min-width:300px;max-width:400px;top:50%;left:50%;transform:translate(-50%,-50%);';
+  popup.innerHTML = `<h4 style="margin:0 0 10px;color:#1e3a8a;">Kayıtlı Dosyadan Bağla</h4>
+    <input type="text" placeholder="Mahkeme veya dosya no ara…" style="width:100%;border:1px solid #bfdbfe;border-radius:10px;padding:9px 12px;font:inherit;font-size:13px;margin-bottom:8px;outline:none;box-sizing:border-box;">
+    <div style="max-height:220px;overflow:auto;border:1px solid #eff6ff;border-radius:10px;"></div>
+    <button type="button" style="margin-top:10px;font-size:12px;background:none;border:none;color:#64748b;cursor:pointer;">İptal</button>`;
+  document.body.appendChild(popup);
+  inlineSearchPopup = popup;
+  const input = popup.querySelector('input');
+  const list = popup.querySelector('div');
+  const cancelBtn = popup.querySelector('button');
+  function renderList(q) {
+    const files = state.clientFiles.filter(f => !f.closed && f.client !== ui.selectedClient).filter(f => {
+      if (!q) return true;
+      return `${getFileCourt(f)} ${getFileNumber(f)} ${f.client||''}`.toLocaleLowerCase('tr').includes(q.toLocaleLowerCase('tr'));
+    }).slice(0, 40);
+    list.innerHTML = files.length ? files.map(f => `<div data-link-file="${f.id}" style="padding:9px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid #eff6ff;">
+      <b>${escapeHtml(getFileCourt(f)||'-')}</b> — ${escapeHtml(getFileNumber(f)||'-')}${f.client?` <span style="color:#059669;font-size:11px;">(${escapeHtml(f.client)})</span>`:''}
+    </div>`).join('') : '<div style="padding:12px;color:#94a3b8;font-size:13px;">Dosya bulunamadı</div>';
+  }
+  renderList('');
+  input.addEventListener('input', () => renderList(input.value));
+  list.addEventListener('click', e => {
+    const item = e.target.closest('[data-link-file]');
+    if (!item) return;
+    const file = getFileById(item.getAttribute('data-link-file'));
+    if (file) { file.client = ui.selectedClient; saveState(); render(); setMessage('Dosya müvekkile bağlandı.'); }
+    popup.remove(); inlineSearchPopup = null;
+  });
+  cancelBtn.addEventListener('click', () => { popup.remove(); inlineSearchPopup = null; });
+  input.focus();
+});
+document.getElementById('partyForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const input = document.getElementById('partyInput');
+  const text = input.value.trim();
+  if (!text) return;
+  state.partyItems.unshift({ id: crypto.randomUUID(), text });
+  input.value = '';
+  render();
+});
+document.getElementById('personalForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const input = document.getElementById('personalInput');
+  const text = input.value.trim();
+  if (!text) return;
+  state.personalItems.unshift({ id: crypto.randomUUID(), text });
+  input.value = '';
+  render();
+});
+document.getElementById('taskFileSearchInput').addEventListener('input', renderTaskFilePicker);
+document.getElementById('closeTaskFilePickerBtn').addEventListener('click', closeTaskFilePicker);
+document.getElementById('taskFilePickerModal').addEventListener('click', e => {
+  if (e.target.id === 'taskFilePickerModal') closeTaskFilePicker();
+});
+document.getElementById('clearTaskFileLinkBtn').addEventListener('click', () => {
+  const task = getTaskById(ui.taskPickerTaskId);
+  if (!task) return;
+  task.fileId = '';
+  task.fileName = '';
+  task.clientName = '';
+  closeTaskFilePicker();
+  render();
+  setMessage('İşin dosya bağlantısı kaldırıldı.');
+});
+document.getElementById('expenseClientSelect').addEventListener('change', e => { document.getElementById('expenseClientInput').value = e.target.value; updateMainFileSelects(); });
+document.getElementById('incomeClientSelect').addEventListener('change', e => { document.getElementById('incomeClientInput').value = e.target.value; updateMainFileSelects(); });
+document.getElementById('expenseClientInput').addEventListener('input', updateMainFileSelects);
+document.getElementById('incomeClientInput').addEventListener('input', updateMainFileSelects);
+document.getElementById('expectedIncomeClientSelect').addEventListener('change', e => { document.getElementById('expectedIncomeClientInput').value = e.target.value; updateMainFileSelects(); });
+document.getElementById('expectedIncomeClientInput').addEventListener('input', updateMainFileSelects);
+document.getElementById('expenseForm').addEventListener('submit', e => {
+  e.preventDefault(); const client = ensureClient(getExpenseFormClient()); const amount = Number(document.getElementById('expenseAmount').value || 0); const date = document.getElementById('expenseDate').value; const fileId = document.getElementById('expenseFileSelect').value; const file = getFileById(fileId); if (!client || !amount || !date) return; state.expenses.unshift({ id: crypto.randomUUID(), client, fileId: file ? file.id : '', fileName: file ? getFileDisplayName(file) : '', amount, date }); document.getElementById('expenseClientInput').value=''; document.getElementById('expenseClientSelect').value=''; document.getElementById('expenseFileSelect').innerHTML='<option value="">Dosya seçin (opsiyonel)</option>'; document.getElementById('expenseAmount').value=''; document.getElementById('expenseDate').value=todayStr(); render();
+});
+document.getElementById('incomeForm').addEventListener('submit', e => {
+  e.preventDefault(); const client = ensureClient(getIncomeFormClient()); const amount = Number(document.getElementById('incomeAmount').value || 0); const date = document.getElementById('incomeDate').value; const fileId = document.getElementById('incomeFileSelect').value; const file = getFileById(fileId); if (!client || !amount || !date) return; state.incomes.unshift({ id: crypto.randomUUID(), client, fileId: file ? file.id : '', fileName: file ? getFileDisplayName(file) : '', amount, date }); document.getElementById('incomeClientInput').value=''; document.getElementById('incomeClientSelect').value=''; document.getElementById('incomeFileSelect').innerHTML='<option value="">Dosya seçin (opsiyonel)</option>'; document.getElementById('incomeAmount').value=''; document.getElementById('incomeDate').value=todayStr(); render();
+});
+document.getElementById('expectedIncomeForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const client = ensureClient(getExpectedIncomeFormClient());
+  const amount = Number(document.getElementById('expectedIncomeAmount').value || 0);
+  const dueDate = document.getElementById('expectedIncomeDueDate').value;
+  const fileId = document.getElementById('expectedIncomeFileSelect').value;
+  const file = getFileById(fileId);
+  if (!client || !amount || !dueDate) return;
+  state.expectedIncomes.unshift({ id: crypto.randomUUID(), client, fileId: file ? file.id : '', fileName: file ? getFileDisplayName(file) : '', amount, dueDate });
+  document.getElementById('expectedIncomeClientInput').value='';
+  document.getElementById('expectedIncomeClientSelect').value='';
+  document.getElementById('expectedIncomeFileSelect').innerHTML='<option value="">Dosya seçin (opsiyonel)</option>';
+  document.getElementById('expectedIncomeAmount').value='';
+  document.getElementById('expectedIncomeDueDate').value=todayStr();
+  render();
+});
+document.getElementById('fileExpectedIncomeForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const file = getFileById(ui.selectedFileId);
+  const amount = Number(document.getElementById('fileExpectedIncomeAmount').value || 0);
+  const dueDate = document.getElementById('fileExpectedIncomeDueDate').value;
+  if (!file || !amount || !dueDate) return;
+  state.expectedIncomes.unshift({ id: crypto.randomUUID(), client: file.client, fileId: file.id, fileName: getFileDisplayName(file), amount, dueDate });
+  document.getElementById('fileExpectedIncomeAmount').value='';
+  document.getElementById('fileExpectedIncomeDueDate').value=todayStr();
+  render();
+});
+document.getElementById('fileIncomeForm').addEventListener('submit', e => {
+  e.preventDefault(); const file = getFileById(ui.selectedFileId); const amount = Number(document.getElementById('fileIncomeAmount').value || 0); const date = document.getElementById('fileIncomeDate').value; if (!file || !amount || !date) return; state.incomes.unshift({ id: crypto.randomUUID(), client: file.client, fileId: file.id, fileName: getFileDisplayName(file), amount, date }); document.getElementById('fileIncomeAmount').value=''; document.getElementById('fileIncomeDate').value=todayStr(); render();
+});
+document.getElementById('fileExpenseForm').addEventListener('submit', e => {
+  e.preventDefault(); const file = getFileById(ui.selectedFileId); const amount = Number(document.getElementById('fileExpenseAmount').value || 0); const date = document.getElementById('fileExpenseDate').value; if (!file || !amount || !date) return; state.expenses.unshift({ id: crypto.randomUUID(), client: file.client, fileId: file.id, fileName: getFileDisplayName(file), amount, date }); document.getElementById('fileExpenseAmount').value=''; document.getElementById('fileExpenseDate').value=todayStr(); render();
+});
+document.getElementById('companyExpenseForm').addEventListener('submit', e => {
+  e.preventDefault(); if (!ui.selectedCompany) return; const amount = Number(document.getElementById('companyExpenseAmount').value || 0); const date = document.getElementById('companyExpenseDate').value; const description = document.getElementById('companyExpenseDescription').value.trim(); if (!amount || !date) return; state.companyExpenses.unshift({ id: crypto.randomUUID(), company: ui.selectedCompany, description, amount, date }); document.getElementById('companyExpenseAmount').value=''; document.getElementById('companyExpenseDescription').value=''; document.getElementById('companyExpenseDate').value=todayStr(); render();
+});
+document.getElementById('companyIncomingForm').addEventListener('submit', e => {
+  e.preventDefault(); if (!ui.selectedCompany) return; const amount = Number(document.getElementById('companyIncomingAmount').value || 0); const date = document.getElementById('companyIncomingDate').value; const description = document.getElementById('companyIncomingDescription').value.trim(); if (!amount || !date) return; state.companyIncoming.unshift({ id: crypto.randomUUID(), company: ui.selectedCompany, description, amount, date }); document.getElementById('companyIncomingAmount').value=''; document.getElementById('companyIncomingDescription').value=''; document.getElementById('companyIncomingDate').value=todayStr(); render();
+});
+document.getElementById('companyFeeForm').addEventListener('submit', e => {
+  e.preventDefault(); if (!ui.selectedCompany) return; const amount = Number(document.getElementById('companyFeeAmount').value || 0); const date = document.getElementById('companyFeeDate').value; const description = document.getElementById('companyFeeDescription').value.trim(); if (!amount || !date) return; state.companyFees.unshift({ id: crypto.randomUUID(), company: ui.selectedCompany, description, amount, date }); document.getElementById('companyFeeAmount').value=''; document.getElementById('companyFeeDescription').value=''; document.getElementById('companyFeeDate').value=todayStr(); render();
+});
+document.getElementById('startingBalance').addEventListener('input', e => { state.startingBalance = Number(e.target.value || 0); render(); });
+document.getElementById('rangeStart').addEventListener('input', updateRangeSummary);
+document.getElementById('rangeEnd').addEventListener('input', updateRangeSummary);
+document.getElementById('clearFilterBtn').addEventListener('click', () => { document.getElementById('rangeStart').value=''; document.getElementById('rangeEnd').value=''; updateRangeSummary(); });
+document.body.addEventListener('change', e => {
+  // Dosyayı kapat
+  const closeFile = e.target.closest('[data-close-file]');
+  if (closeFile && closeFile.checked) {
+    const id = closeFile.getAttribute('data-close-file');
+    const file = state.clientFiles.find(f => f.id === id);
+    if (file) { file.closed = true; saveState(); renderAllFiles(); }
+    return;
+  }
+  // Dosyayı yeniden aç
+  const reopenFile = e.target.closest('[data-reopen-file]');
+  if (reopenFile && !reopenFile.checked) {
+    const id = reopenFile.getAttribute('data-reopen-file');
+    const file = state.clientFiles.find(f => f.id === id);
+    if (file) { file.closed = false; saveState(); renderAllFiles(); }
+    return;
+  }
+  // Ajanda checkbox
+  const checkEl = e.target.closest('[data-agenda-check]');
+  if (checkEl) {
+    const key = checkEl.getAttribute('data-agenda-check');
+    if (!state.agendaEntries) state.agendaEntries = {};
+    if (!state.agendaEntries[key]) state.agendaEntries[key] = { text: '', done: false };
+    state.agendaEntries[key].done = checkEl.checked;
+    const row = checkEl.closest('.agenda-row');
+    if (row) {
+      const textInput = row.querySelector('[data-agenda-text]');
+      if (textInput) textInput.classList.toggle('done-text', checkEl.checked);
+    }
+    saveState();
+    return;
+  }
+  const updateIncomeDate = e.target.closest('[data-update-income-date]');
+  if (updateIncomeDate) {
+    const id = updateIncomeDate.getAttribute('data-update-income-date');
+    const value = updateIncomeDate.value;
+    state.incomes = state.incomes.map(item => item.id === id ? { ...item, date: value || item.date } : item);
+    render();
+    return;
+  }
+});
+// Ajanda metin girişi
+document.body.addEventListener('input', e => {
+  // Görev dosya notu
+  const fileNoteEl = e.target.closest('[data-task-file-note]');
+  if (fileNoteEl) {
+    const id = fileNoteEl.getAttribute('data-task-file-note');
+    const task = state.tasks.find(t => t.id === id);
+    if (task) { task.fileNote = fileNoteEl.value; saveState(); }
+    return;
+  }
+  // Ajanda metin
+  const textEl = e.target.closest('[data-agenda-text]');
+  if (textEl) {
+    const key = textEl.getAttribute('data-agenda-text');
+    if (!state.agendaEntries) state.agendaEntries = {};
+    if (!state.agendaEntries[key]) state.agendaEntries[key] = { text: '', done: false };
+    state.agendaEntries[key].text = textEl.value;
+    saveState();
+  }
+});
+// delegated actions
+document.body.addEventListener('click', e => {
+  const fileCategoryBtn = e.target.closest('[data-file-category]');
+  if (fileCategoryBtn) { ui.fileCategory = fileCategoryBtn.getAttribute('data-file-category') || ''; renderAllFiles(); return; }
+  const openClient = e.target.closest('[data-open-client]');
+  if (openClient) { ui.selectedClient = decodeURIComponent(openClient.getAttribute('data-open-client')); ui.selectedFileId=''; activateTab('clients'); render(); return; }
+  const linkTask = e.target.closest('[data-link-task]');
+  if (linkTask) { openTaskFilePicker(linkTask.getAttribute('data-link-task')); return; }
+  const pickFile = e.target.closest('[data-pick-file]');
+  if (pickFile) {
+    const task = getTaskById(ui.taskPickerTaskId);
+    const file = getFileById(pickFile.getAttribute('data-pick-file'));
+    if (task && file) {
+      task.fileId = file.id;
+      task.fileName = getFileDisplayName(file);
+      task.clientName = file.client;
+      closeTaskFilePicker();
+      render();
+      setMessage('İş ilgili dosyaya bağlandı.');
+    }
+    return;
+  }
+  const delClient = e.target.closest('[data-del-client]');
+  if (delClient) {
+    const client = decodeURIComponent(delClient.getAttribute('data-del-client'));
+    const ok = window.confirm('Müvekkil listeden silinsin mi? Müvekkile ait dosya listesi de kaldırılır. Geçmiş gelir ve masraf kayıtları korunur.');
+    if (!ok) return;
+    state.clients = state.clients.filter(x => x !== client);
+    const deletedFileIds = state.clientFiles.filter(file => file.client === client).map(file => file.id);
+    state.clientFiles = state.clientFiles.filter(file => file.client !== client);
+    state.expenses = state.expenses.map(item => deletedFileIds.includes(item.fileId) ? { ...item, fileId:'', fileName:item.fileName || '' } : item);
+    state.incomes = state.incomes.map(item => deletedFileIds.includes(item.fileId) ? { ...item, fileId:'', fileName:item.fileName || '' } : item);
+    state.expectedIncomes = (state.expectedIncomes || []).map(item => deletedFileIds.includes(item.fileId) ? { ...item, fileId:'', fileName:item.fileName || '' } : item);
+    state.tasks = state.tasks.map(item => deletedFileIds.includes(item.fileId) ? { ...item, fileId:'', fileName:'', clientName:'' } : item);
+    if (ui.selectedClient === client) { ui.selectedClient=''; ui.selectedFileId=''; }
+    render(); return;
+  }
+  const openCompany = e.target.closest('[data-open-company]');
+  if (openCompany) { ui.selectedCompany = decodeURIComponent(openCompany.getAttribute('data-open-company')); ui.companyTab = 'expenses'; activateTab('company'); render(); return; }
+  const delCompany = e.target.closest('[data-del-company]');
+  if (delCompany) {
+    const company = decodeURIComponent(delCompany.getAttribute('data-del-company'));
+    const ok = window.confirm('Şirket listeden silinsin mi? Şirkete ait masraf, gelen ve vekalet kayıtları da silinir.');
+    if (!ok) return;
+    state.companies = state.companies.filter(x => x !== company);
+    state.companyExpenses = state.companyExpenses.filter(x => x.company !== company);
+    state.companyIncoming = state.companyIncoming.filter(x => x.company !== company);
+    state.companyFees = state.companyFees.filter(x => x.company !== company);
+    if (ui.selectedCompany === company) ui.selectedCompany = '';
+    render(); return;
+  }
+  const openFile = e.target.closest('[data-open-file]');
+  if (openFile) { ui.selectedFileId = openFile.getAttribute('data-open-file'); render(); return; }
+  const openFileDirect = e.target.closest('[data-open-file-direct]');
+  if (openFileDirect) {
+    const file = getFileById(openFileDirect.getAttribute('data-open-file-direct'));
+    if (!file) return;
+    ui.selectedClient = file.client; ui.selectedFileId = file.id; activateTab('clients'); render(); return;
+  }
+  const delFile = e.target.closest('[data-del-file]');
+  if (delFile) {
+    const fileId = delFile.getAttribute('data-del-file');
+    const file = getFileById(fileId);
+    const ok = window.confirm('Dosya silinsin mi? Dosyaya bağlı mevcut gelir ve masraf kayıtları korunur; sadece dosya kartı kaldırılır.');
+    if (!ok) return;
+    state.clientFiles = state.clientFiles.filter(x => x.id !== fileId);
+    state.expenses = state.expenses.map(item => item.fileId === fileId ? { ...item, fileId:'', fileName:item.fileName || (file ? file.name : '') } : item);
+    state.incomes = state.incomes.map(item => item.fileId === fileId ? { ...item, fileId:'', fileName:item.fileName || (file ? file.name : '') } : item);
+    state.expectedIncomes = (state.expectedIncomes || []).map(item => item.fileId === fileId ? { ...item, fileId:'', fileName:item.fileName || (file ? file.name : '') } : item);
+    state.tasks = state.tasks.map(item => item.fileId === fileId ? { ...item, fileId:'', fileName:'', clientName:'' } : item);
+    if (ui.selectedFileId === fileId) ui.selectedFileId = '';
+    render(); return;
+  }
+  const delPartyItem = e.target.closest('[data-del-party-item]');
+  if (delPartyItem) { state.partyItems = (state.partyItems || []).filter(x => x.id !== delPartyItem.getAttribute('data-del-party-item')); render(); return; }
+  const delPersonalItem = e.target.closest('[data-del-personal-item]');
+  if (delPersonalItem) { state.personalItems = (state.personalItems || []).filter(x => x.id !== delPersonalItem.getAttribute('data-del-personal-item')); render(); return; }
+  const delTask = e.target.closest('[data-del-task]');
+  if (delTask) { state.tasks = state.tasks.filter(x => x.id !== delTask.getAttribute('data-del-task')); render(); return; }
+  const delExpense = e.target.closest('[data-del-expense]');
+  if (delExpense) { state.expenses = state.expenses.filter(x => x.id !== delExpense.getAttribute('data-del-expense')); render(); return; }
+  const delIncome = e.target.closest('[data-del-income]');
+  if (delIncome) { state.incomes = state.incomes.filter(x => x.id !== delIncome.getAttribute('data-del-income')); render(); return; }
+  const delExpectedIncome = e.target.closest('[data-del-expected-income]');
+  if (delExpectedIncome) { state.expectedIncomes = (state.expectedIncomes || []).filter(x => x.id !== delExpectedIncome.getAttribute('data-del-expected-income')); render(); return; }
+  const delCompanyExpense = e.target.closest('[data-del-company-expense]');
+  if (delCompanyExpense) { state.companyExpenses = state.companyExpenses.filter(x => x.id !== delCompanyExpense.getAttribute('data-del-company-expense')); render(); return; }
+  const delCompanyIncoming = e.target.closest('[data-del-company-incoming]');
+  if (delCompanyIncoming) { state.companyIncoming = state.companyIncoming.filter(x => x.id !== delCompanyIncoming.getAttribute('data-del-company-incoming')); render(); return; }
+  const delCompanyFee = e.target.closest('[data-del-company-fee]');
+  if (delCompanyFee) { state.companyFees = state.companyFees.filter(x => x.id !== delCompanyFee.getAttribute('data-del-company-fee')); render(); return; }
+});
+document.body.addEventListener('change', e => {
+  const fileClientSelect = e.target.closest('[data-file-client-select]');
+  if (fileClientSelect) {
+    setFileClient(fileClientSelect.getAttribute('data-file-client-select'), fileClientSelect.value);
+    render();
+    return;
+  }
+  const toggle = e.target.closest('[data-toggle-task]');
+  if (toggle) {
+    const id = toggle.getAttribute('data-toggle-task');
+    const item = state.tasks.find(x => x.id === id);
+    if (item) item.done = toggle.checked;
+    render();
+    return;
+  }
+  const realizeExpectedIncome = e.target.closest('[data-realize-expected-income]');
+  if (realizeExpectedIncome && realizeExpectedIncome.checked) {
+    const id = realizeExpectedIncome.getAttribute('data-realize-expected-income');
+    const item = (state.expectedIncomes || []).find(x => x.id === id);
+    if (!item) return;
+    state.incomes.unshift({ id: crypto.randomUUID(), client: item.client, fileId: item.fileId || '', fileName: item.fileName || '', amount: Number(item.amount || 0), date: todayStr() });
+    state.expectedIncomes = (state.expectedIncomes || []).filter(x => x.id !== id);
+    render();
+    setMessage('Beklenen gelir tahsil edildi ve gelir listesine taşındı.');
+    return;
+  }
+});
+document.getElementById('pdfImportInput')?.addEventListener('change', async e => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  try {
+    await importFilesFromPdf(file);
+  } catch (err) {
+    console.error(err);
+    setMessage('PDF içe aktarımı sırasında hata oluştu.');
+  } finally {
+    e.target.value = '';
+  }
+});
+document.getElementById('backupBtn').addEventListener('click', downloadBackup);
+document.getElementById('resetAllBtn').addEventListener('click', resetAllData);
+document.getElementById('clearFilesBtn')?.addEventListener('click', clearAllFiles);
+document.getElementById('restoreInput').addEventListener('change', async e => {
+  const file = e.target.files && e.target.files[0]; if (!file) return;
+  try {
+    const text = await file.text(); const payload = JSON.parse(text);
+    if (!isValidBackupPayload(payload)) { setMessage('Yedek dosyası geçerli görünmüyor.'); return; }
+    const ok = window.confirm('Mevcut kayıtlar bu yedekle değiştirilecek. Devam edilsin mi?'); if (!ok) return;
+    applyBackupPayload(payload); render(); setMessage('Yedek başarıyla geri yüklendi.');
+  } catch (err) { console.error(err); setMessage('Yedek geri yüklenirken hata oluştu.'); }
+  finally { e.target.value = ''; }
+});
+document.getElementById('excelImport').addEventListener('change', async e => {
+  const file = e.target.files && e.target.files[0]; if (!file) return;
+  try {
+    const buffer = await file.arrayBuffer(); const workbook = XLSX.read(buffer, { type: 'array' }); const firstSheet = workbook.Sheets[workbook.SheetNames[0]]; const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: '' });
+    if (!rows.length) { setMessage('Excel dosyasında veri bulunamadı.'); return; }
+    const headerRow = (rows[0] || []).map(cell => String(cell).trim().toLowerCase());
+    const clientColumnIndex = headerRow.findIndex(cell => ['müvekkil','muvekkil','ad soyad','isim','client','name'].includes(cell));
+    const imported = [];
+    if (clientColumnIndex >= 0) { for (let i = 1; i < rows.length; i++) { const name = String(rows[i]?.[clientColumnIndex] || '').trim(); if (name) imported.push(name); } }
+    else { for (let i = 0; i < rows.length; i++) { const firstNonEmpty = rows[i].find(cell => String(cell || '').trim()); const name = String(firstNonEmpty || '').trim(); if (name) imported.push(name); } }
+    const uniqueImported = [...new Set(imported)];
+    if (!uniqueImported.length) { setMessage("Müvekkil adı bulunamadı. İlk sütunda isimler olmalı veya sütun adı 'Müvekkil' yazmalı."); return; }
+    state.clients = [...new Set([...state.clients, ...uniqueImported])]; setMessage(uniqueImported.length + ' müvekkil içeri aktarıldı.'); render();
+  } catch (err) { console.error(err); setMessage('Excel içe aktarımı sırasında hata oluştu.'); }
+  finally { e.target.value = ''; }
+});
+const exportExcelBtn = document.getElementById('exportExcelBtn');
+const exportExcelMenu = document.getElementById('exportExcelMenu');
+const exportClientsBtn = document.getElementById('exportClientsBtn');
+const exportFilesBtn = document.getElementById('exportFilesBtn');
+
+function downloadWorkbook(sheetName, rows, fileName) {
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(rows), sheetName);
+  XLSX.writeFile(workbook, fileName);
+}
+
+exportExcelBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  exportExcelMenu.classList.toggle('hidden');
+});
+
+exportClientsBtn.addEventListener('click', () => {
+  const rows = [...state.clients]
+    .sort((a,b)=>a.localeCompare(b,'tr'))
+    .map(client => ({ Müvekkil: client }));
+  downloadWorkbook('Müvekkiller', rows, 'müvekkiller-' + todayStr() + '.xlsx');
+  exportExcelMenu.classList.add('hidden');
+});
+
+exportFilesBtn.addEventListener('click', () => {
+  const rows = [...state.clientFiles]
+    .sort((a,b) => {
+      const clientCompare = String(a.client || '').localeCompare(String(b.client || ''), 'tr');
+      if (clientCompare !== 0) return clientCompare;
+      return getFileDisplayName(a).localeCompare(getFileDisplayName(b), 'tr');
+    })
+    .map(item => ({ 'Müvekkil': item.client || '', 'Birim': getFileUnit(item), 'Mahkeme': getFileCourt(item), 'Dosya No': getFileNumber(item), 'Dosya Türü': item.fileType || '' }));
+  downloadWorkbook('Dosyalar', rows, 'dosyalar-' + todayStr() + '.xlsx');
+  exportExcelMenu.classList.add('hidden');
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.export-wrap')) {
+    exportExcelMenu.classList.add('hidden');
+  }
+});
+
+document.getElementById('printPdfBtn').addEventListener('click', () => window.print());
+render();
+// Açılışta buluttan son veriyi çek
+pullFromSupabase();
+
+// PWA Service Worker
+if ('serviceWorker' in navigator) {
+  const swCode = `
+const CACHE = 'ofis-takip-v1';
+const ASSETS = [location.href];
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
+  self.skipWaiting();
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))));
+  self.clients.claim();
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).catch(() => caches.match(e.request))));
+});
+  `.trim();
+  const blob = new Blob([swCode], { type: 'application/javascript' });
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(() => {});
+}
+</script>
+
+</body>
+</html>
